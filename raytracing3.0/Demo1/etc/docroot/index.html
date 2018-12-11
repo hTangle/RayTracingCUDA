@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>threejs-basic-geometry</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        .my_output_bottom_left {
+            background-color: #c3c3c3;
+            bottom: 0px;
+        }
+    </style>
+</head>
+
+
+<!--图层 three.js/example/layers-->
+<body>
+
+    <!--导航-->
+    <header id = "navigate" class="navbar fixed-top navbar-expand-sm navbar-light bg-light" style="background-color: #e3f2fd;">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link btn-light" href="javascript:;" onclick="sendMessage('2')">开始程序</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                                         aria-expanded="false">设置场景</a>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">打开地图文件</button>
+                    <button class="dropdown-item" data-toggle="modal" data-target="#roadfile">打开道路文件</button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" data-toggle="modal" data-target="#sceneChoice">选择默认场景</button>
+                    <a class="dropdown-item" href="javascript:;" onclick="parseFile()">默认地图</a>
+                    <a class="dropdown-item" href="javascript:;" onclick="parseDefaultfile('seu')">东南大学</a>
+                    <a class="dropdown-item" href="javascript:;" onclick="parseDefaultfile('nhdx')">内环东线</a>
+                    <a class="dropdown-item" href="javascript:;" onclick="parseDefaultfile('zsl')">中山路</a>
+                    <a class="dropdown-item" href="javascript:;" onclick="location.reload()">重置场景</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">设置车辆</a>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" data-toggle="modal" data-target="#vehicleModal">添加车辆</button>
+                    <a class="dropdown-item" href="javascript:;"  onclick="setTx('tx')">添加Tx</a>
+                    <a class="dropdown-item" href="javascript:;"  onclick="setTx('rx')">添加Rx</a>
+                    <a class="dropdown-item" href="javascript:;"  onclick="setTx('other')">添加车辆</a>
+                    <a class="dropdown-item" href="javascript:;"  onclick="reset()">重置</a>
+                    <div class="dropdown-divider"></div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                    aria-controls="collapseExample">
+                    图层信息
+                </a>
+                <a class="btn btn-light" data-toggle="collapse" href="#collapseExample01" role="button" aria-expanded="false"
+                    aria-controls="collapseExample01">
+                    输出结果
+                </a>
+            </li>
+
+        </ul>
+
+    </header>
+
+    <!--显示界面-->
+
+            <div id="webgl" class="card card-success w-100 h-100" style="height:800px"></div>
+            <div id="gui" class="position-absolute" width="100" style="top: 60px;left: 0px;color: white;">
+            </div>
+            <div class="collapse position-absolute" id="collapseExample" style="bottom:0px">
+                <div class="card card-body">
+                    <div style="height: 400px" class="card card-success">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr class="active">
+                                    <th>Car ID</th>
+                                    <th>RX</th>
+                                    <th>Coordinate</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-success">
+                                    <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            001
+                                        </button></td>
+                                    <td>True</td>
+                                    <td>(13.5,6.2)</td>
+                                    <td>A</td>
+                                </tr>
+                                <tr class="table-danger">
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            002
+                                        </button></td>
+                                    <td>False</td>
+                                    <td>(14.5,7.5)</td>
+                                    <td>A</td>
+                                </tr>
+                                <tr class="table-danger">
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            003
+                                        </button></td>
+                                    <td>False</td>
+                                    <td>(17.7,5.2)</td>
+                                    <td>A</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse position-absolute" id="collapseExample01"  style="bottom:0px;left: 0px;z-index: 5" >
+                <div class="card card-body">
+                    <!--数据展示部分 container-->
+                    <div class="container">
+                        <div class="card card-success">
+                            <div class="btn-group btn-group-sm">
+                                <button id="pathloss" type="button" class="btn btn-primary">路径损耗</button>
+                                <button id="powerdelay" type="button" class="btn btn-secondary">功率时延分布</button>
+                                <button id="meandelay" type="button" class="btn btn-success">平均附加时延</button>
+                                <button id="dimpowerdelay" type="button" class="btn btn-danger">功率时延空间分布</button>
+                            </div>
+                            <div id="main" style="width:800px;height:400px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <canvas id="locationCanvas" class="position-absolute" width="200" height="40" style="border:1px solid #c3c3c3;top: 70px;right: 20px;color: white;">
+                Your browser does not support the canvas element.
+            </canvas>
+
+
+    <!--模态框 车辆设置-->
+    <div class="modal fade" id="vehicleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" >新建车辆</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form >
+                        <div class="form-group row">
+                            <label for="speed" class="col-sm-2 col-form-label">车速</label>
+                            <div class="col-sm-10">
+                                <input type="number" id="speed" name="tentacles"
+                                       min="10" max="100">km/h
+                            </div>
+
+                        </div>
+                        <fieldset class="form-group">
+                            <div class="row">
+                                <legend class="col-form-label col-sm-2 pt-0">类型</legend>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="tx" checked>
+                                        <label class="form-check-label" for="gridRadios1">
+                                            发射车辆
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="other">
+                                        <label class="form-check-label" for="gridRadios2">
+                                            障碍车辆
+                                        </label>
+                                    </div>
+                                    <div class="form-check disabled">
+                                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="rx" >
+                                        <label class="form-check-label" for="gridRadios3">
+                                            接收车辆
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group row">
+                            <div class="col-sm-2">动态</div>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="dynamic">
+                                    <label class="form-check-label" for="dynamic">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button data-dismiss="modal" type="submit" class="btn btn-primary" onclick="processVehicleForm()">新建</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 模态框 场景选择-->
+    <div class="modal"  id = "sceneChoice" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">场景选择</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <!--<button data-dismiss=""></button>-->
+                </div>
+                <div class="默认场景选择">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <a data-dismiss="modal" href="javascript:;" onclick="parseDefaultfile('seu') ">
+                                    <div  class="card" style="width: 8rem;">
+                                        <img src = "./img/东南大学.jpg" style=" height: 6rem;" class="card-img-top"  alt="Card image cap">
+                                        <div class="card-body">
+                                            <p class="card-text">东南大学</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="col-sm">
+                                <a data-dismiss="modal" href="javascript:;" onclick="parseDefaultfile('zsl')">
+
+                                    <div  class="card" style="width: 8rem ;">
+                                        <img src = "./img/中山路.jpg" style=" height: 6rem;" class="card-img-top"  alt="Card image cap">
+                                        <div class="card-body">
+                                            <p class="card-text">中山路</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="col-sm">
+                                <a  data-dismiss="modal" href="javascript:;" onclick="parseDefaultfile('nhdx')">
+                                    <div  class="card" style="width: 8rem; ">
+                                        <img src = "./img/内环东线.jpg" style=" height: 6rem;" class="card-img-top"  alt="Card image cap">
+                                        <div class="card-body">
+                                            <p class="card-text">内环东线</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal 模态框 文件选择-->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Open File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <h5><span class="badge badge-secondary">shp文件:</span></h5>
+                                <input type="file" class="form-control-file" id="file-input">
+                                <hr>
+                                <h5><span class="badge badge-secondary">dbf文件:</span></h5>
+                                <input type="file" class="form-control-file" id="dbf-file-input">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="parseFile()" data-dismiss="modal">Open</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="roadfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roadfilelabel">Open File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <h5><span class="badge badge-secondary">shp文件:</span></h5>
+                                <input type="file" class="form-control-file" id="road-file-input">
+                                <hr>
+                                <h5><span class="badge badge-secondary">dbf文件:</span></h5>
+                                <input type="file" class="form-control-file" id="road-dbf-file-input">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="parseRoadFile()" data-dismiss="modal">Open</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--导入js-->
+    <script type="text/javascript" src="js/three.js"></script>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/TDSLoader.js"></script>
+    <script type="text/javascript" src="js/tether.min.js"></script>
+    <script src="js/controls/DragControls.js"></script>
+    <script src="js/controls/TrackballControls.js"></script>
+    <script src="js/Lut.js"></script>
+    <script src="js/loaders/FBXLoader.js"></script>
+    <script src="js/libs/inflate.min.js"></script>
+    <script src='js/libs/dat.gui.min.js'></script>
+
+    <!--line-->
+    <script src='js/lines/LineSegmentsGeometry.js'></script>
+    <script src='js/lines/LineGeometry.js'></script>
+    <script src='js/lines/WireframeGeometry2.js'></script>
+    <script src='js/lines/LineMaterial.js'></script>
+    <script src='js/lines/LineSegments2.js'></script>
+    <script src='js/lines/Line2.js'></script>
+    <script src='js/lines/Wireframe.js'></script>
+    <script src="js/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="localjs/websocket.js"></script>
+    <!--echart-->
+    <script src = "localjs/echart.js" type="text/javascript"></script>
+    <!--webgl-->
+    <script src="localjs/webgl.js"></script>
+
+    <!--read-file-->
+    <script src="js/shapefile.js"></script>
+    <script src="localjs/readfile.js"></script>
+
+
+</body>
+
+</html>

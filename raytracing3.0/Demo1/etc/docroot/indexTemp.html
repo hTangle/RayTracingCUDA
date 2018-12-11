@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>threejs-basic-geometry</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        .my_output_bottom_left {
+            background-color: #c3c3c3;
+            bottom: 0px;
+        }
+    </style>
+    <!-- <link rel="stylesheet" href="css/bootstrap-submenu.css">
+    <script src="js/bootstrap-submenu.js" defer></script> -->
+    <header class="navbar fixed-top navbar-expand-sm navbar-light bg-light" style="background-color: #e3f2fd;">
+
+
+            <ul class="nav nav-pills">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Project</a>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item">New</button>
+                        <button class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Open</button>
+                        <a href="#" class="data-toggle" data-toggle="dropdown" data-submenu></a>
+                        <a class="dropdown-item" href="#">Import</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:;" onclick="sendMessage('2')">Run</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Save</a>
+                        <a class="dropdown-item" href="#">Save As</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Explore</a>
+                        <a class="dropdown-item" href="#">Statistics</a>
+                        <a class="dropdown-item" href="#">Output properties</a>
+                        <a class="dropdown-item" href="#">Properties</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Recent projects</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Close</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Edit</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Delete</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Preferences</a>
+                        <a class="dropdown-item" href="javascript:;" onclick="setTx()">Set TX</a>
+                        <a class="dropdown-item" href="javascript:;" onclick="setRx()">Set RX</a>
+                        <a class="dropdown-item" href="javascript:;" onclick="reset()">Reset TX&RX</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">View</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Import</a>
+                        <a class="dropdown-item" href="#">Save</a>
+                        <a class="dropdown-item" href="#">Save as TIFF</a>
+                        <a class="dropdown-item" href="#">Save as JPEG</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Orthographic</a>
+                        <a class="dropdown-item" href="#">Perspective</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">3D</a>
+                        <a class="dropdown-item" href="#">2D</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Wireframe</a>
+                        <a class="dropdown-item" href="#">Soild-Body</a>
+                        <a class="dropdown-item" href="#">Hi-Lites</a>
+                        <a class="dropdown-item" href="#">2D</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Face normals</a>
+                        <a class="dropdown-item" href="#">Descriptions</a>
+                        <a class="dropdown-item" href="#">Descriptions backgrounds</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Grid</a>
+                        <a class="dropdown-item" href="#">Legend</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Reset</a>
+                        <a class="dropdown-item" href="#">Z-Scaling</a>
+                        <a class="dropdown-item" href="#">Refresh</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Study Areas</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Citys</a>
+                        <a class="dropdown-item" href="#">Terrians</a>
+                        <a class="dropdown-item" href="#">Foilage</a>
+                        <a class="dropdown-item" href="#">Floor Plans</a>
+                        <a class="dropdown-item" href="#">Citys</a>
+                        <a class="dropdown-item" href="#">Objects</a>
+                        <a class="dropdown-item" href="#">Receivers</a>
+                        <a class="dropdown-item" href="#">Transceivers</a>
+                        <a class="dropdown-item" href="#">Transmitters</a>
+                        <a class="dropdown-item" href="#">Images</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Output</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">View</a>
+                        <a class="dropdown-item" href="#">Clear all output</a>
+                        <a class="dropdown-item" href="#">Flush output</a>
+                        <a class="dropdown-item" href="#">Reload output</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Select</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Clear</a>
+                        <a class="dropdown-item" href="#">Center on selection</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Feature</a>
+                        <a class="dropdown-item" href="#">Structure Group</a>
+                        <a class="dropdown-item" href="#">Structure</a>
+                        <a class="dropdown-item" href="#">Sub structure</a>
+                        <a class="dropdown-item" href="#">Face</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">TX/RX set</a>
+                        <a class="dropdown-item" href="#">TX/RX point</a>
+                        <a class="dropdown-item" href="#">TX/RX point pari</a>
+                        <a class="dropdown-item" href="#">Output</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                        aria-expanded="false">Help</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Reference Manual</a>
+                        <a class="dropdown-item" href="#">User's guide</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Change log</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                        aria-controls="collapseExample">
+                        Setting
+                    </a>
+                    <a class="btn btn-light" data-toggle="collapse" href="#collapseExample01" role="button" aria-expanded="false"
+                        aria-controls="collapseExample01">
+                        Output
+                    </a>
+        
+                </li>
+        
+        
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">离开</a>
+                </li>
+            </ul>
+        
+        
+        </header>
+</head>
+
+
+<!--图层 three.js/example/layers-->
+<body>
+
+    <!--导航-->
+
+    <!-- <header class="navbar fixed-top navbar-expand-sm navbar-light bg-light" style="background-color: #e3f2fd;">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link btn-light" href="javascript:;" onclick="sendMessage('2')">开始程序</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle btn-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">设置</a>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">打开地图文件</button>
+                    <a class="dropdown-item" href="javascript:;" onclick="parseFile()">默认地图</a>
+                    <button class="dropdown-item" data-toggle="modal" data-target="#roadfile">打开道路文件</button>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">亮度设置</a>
+                    <a class="dropdown-item" href="#">鼠标灵敏度设置</a>
+                    <a class="dropdown-item" href="#">锁定地图显示</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <button type="button" class="btn btn-light" onclick="setTx()">set tx</button>
+
+                <button type="button" class="btn btn-light" onclick="setRx()">set rx</button>
+
+                <button type="button" class="btn btn-light" onclick="reset()">reset</button>
+                <a class="btn btn-light" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                    aria-controls="collapseExample">
+                    Setting
+                </a>
+                <a class="btn btn-light" data-toggle="collapse" href="#collapseExample01" role="button" aria-expanded="false"
+                    aria-controls="collapseExample01">
+                    Output
+                </a>
+
+            </li>
+  </header> -->
+
+
+
+
+
+    <!--显示界面-->
+
+    <div id="webgl"></div>
+    <div class="nav-scroller bg-white shadow-sm position-absolute" style="top:45px;left: 40px;">
+        <nav class="nav nav-underline">
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/new.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/open.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/save.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/run.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/stop.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/3d.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/2d.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/refresh.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/grid-four-up.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/antenna.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/Antenna2.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/distance.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/building.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/chart.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/reset.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/perspective.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/search.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/wave-2.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/hierarchy.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/send.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/call-received.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/system.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/log.svg" width="20" height="20" alt="">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="image/svg/exit.svg" width="20" height="20" alt="">
+            </a>
+            <!-- <a class="nav-link active" href="#">Dashboard</a>
+                        <a class="nav-link" href="#">
+                            Friends
+                            <span class="badge badge-pill bg-light align-text-bottom">27</span>
+                        </a>
+                        <a class="nav-link" href="#">Explore</a>
+                        <a class="nav-link" href="#">Suggestions</a>
+                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="#">Link</a> -->
+        </nav>
+    </div>
+    <div class="container-fluid collapse position-absolute" id="collapseExample" style="background-color: #fffdfd;bottom:0px">
+        <div class="row">
+            <div class="col-2">
+                <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-feature-list" data-toggle="list"
+                        href="#list-feature" role="tab" aria-controls="home">Feature</a>
+                    <a class="list-group-item list-group-item-action" id="list-materials-list" data-toggle="list" href="#list-materials"
+                        role="tab" aria-controls="profile">Materials</a>
+                    <a class="list-group-item list-group-item-action" id="list-waveforms-list" data-toggle="list" href="#list-waveforms"
+                        role="tab" aria-controls="messages">Waveforms</a>
+                    <a class="list-group-item list-group-item-action" id="list-antennas-list" data-toggle="list" href="#list-antennas"
+                        role="tab" aria-controls="settings">Antennas</a>
+                    <a class="list-group-item list-group-item-action" id="list-TxRx-list" data-toggle="list" href="#list-TxRx"
+                        role="tab" aria-controls="settings">Tx/Rx</a>
+                    <a class="list-group-item list-group-item-action" id="list-commsys-list" data-toggle="list" href="#list-commsys"
+                        role="tab" aria-controls="settings">Comm Systems</a>
+                    <a class="list-group-item list-group-item-action" id="list-output-list" data-toggle="list" href="#list-output"
+                        role="tab" aria-controls="settings">Output</a>
+
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-feature" role="tabpanel" aria-labelledby="list-feature-list">
+                        Feature
+                        是需要读取的地图文件，这儿我们目前仅仅支持dbf和shp文件，读取之后会在这儿显示，Active表示是否在3D中显示，Type表示地图的种类，例如城市地图和乡村地图
+                        <table class="table table-hover table-bordered">
+                            <thead class="thead-light">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>Active</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="bottom"
+                                            title="点击可以更新车辆状态">
+                                            001
+                                        </button></td>
+                                    <td>RX</td>
+                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td>A</td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            002
+                                        </button></td>
+                                    <td>TX</td>
+                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td>A</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-materials" role="tabpanel" aria-labelledby="list-materials-list">
+                        Materials表示材料属性，可以在该处选择仿真所采用的材料
+                        <table class="table table-hover table-bordered">
+                            <thead class="thead-light">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>In use</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Feature</th>
+                                    <th>Diffuse Scattering Model</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            001
+                                        </button></td>
+                                    <td>RX</td>
+                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            002
+                                        </button></td>
+                                    <td>TX</td>
+                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-waveforms" role="tabpanel" aria-labelledby="list-waveforms-list">
+                        Waveform表示波形
+                        <table class="table table-hover table-bordered">
+                            <thead class="thead-light">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>In use</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Frequency</th>
+                                    <th>Bandwidth</th>
+                                    <th>Dispersive</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            001
+                                        </button></td>
+                                    <td>RX</td>
+                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            002
+                                        </button></td>
+                                    <td>TX</td>
+                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-antennas" role="tabpanel" aria-labelledby="list-antennas-list">
+                        Antennas表示天线，在这儿可以设置天线种类
+                        <table class="table table-hover table-bordered">
+                            <thead class="thead-light">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>In use</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Polarization</th>
+                                    <th>Maximum gain</th>
+                                    <th>VSWR</th>
+                                    <th>Wavefrom</th>
+                                    <th>Filename</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            001
+                                        </button></td>
+                                    <td>RX</td>
+                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>B</td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            002
+                                        </button></td>
+                                    <td>TX</td>
+                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-TxRx" role="tabpanel" aria-labelledby="list-TxRx-list">
+                        Tx/Rx 已经设置好的Tx和Rx，可以选择天线种类和Waveform
+                        <table class="table table-hover table-bordered">
+                            <thead class="thead-light">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>A</th>
+                                    <th>V</th>
+                                    <th>APG</th>
+                                    <th>Tx</th>
+                                    <th>Rx</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>No. points</th>
+                                    <th>Spacing</th>
+                                    <th>Power</th>
+                                    <th>Antenna</th>
+                                    <th>Waveform</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            001
+                                        </button></td>
+                                    <td>RX</td>
+                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>B</td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            002
+                                        </button></td>
+                                    <td>TX</td>
+                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td>A</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>B</td>
+                                    <td>C</td>
+                                    <td>B</td>
+                                    <td>B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-commsys" role="tabpanel" aria-labelledby="list-commsys-list">
+                        这个是以后需要添加的功能
+                        <table class="table table-hover table-bordered">
+                            <thead class="thead-light">
+                                <tr class="active">
+                                    <th>ID</th>
+                                    <th>Active</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            001
+                                        </button></td>
+                                    <td>RX</td>
+                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td>A</td>
+                                </tr>
+                                <tr>
+                                    <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                            data-placement="bottom" title="点击可以更新车辆状态">
+                                            002
+                                        </button></td>
+                                    <td>TX</td>
+                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td>A</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="list-output" role="tabpanel" aria-labelledby="list-output-list">
+                        我将这个地方注释掉了，事实上可以放置output输出结果的
+                        <!-- <table class="table table-hover table-bordered">
+                                    <thead class="thead-light">
+                                        <tr class="active">
+                                            <th>Car ID</th>
+                                            <th>State</th>
+                                            <th>Coordinate</th>
+                                            <th>Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                                    data-placement="bottom" title="点击可以更新车辆状态">
+                                                    001
+                                                </button></td>
+                                            <td>RX</td>
+                                            <td id="TX_Coordinate">(13.5,6.2)</td>
+                                            <td>A</td>
+                                        </tr>
+                                        <tr>
+                                            <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                    data-placement="bottom" title="点击可以更新车辆状态">
+                                                    002
+                                                </button></td>
+                                            <td>TX</td>
+                                            <td id="RX_Coordinate">(14.5,7.5)</td>
+                                            <td>A</td>
+                                        </tr>
+                                    </tbody>
+                                </table> -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- <div class="accordion" id="accordionExample">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                    aria-expanded="true" aria-controls="collapseOne">
+                                    车辆位置信息
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div style="height: 400px" class="card card-success">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr class="active">
+                                                <th>Car ID</th>
+                                                <th>State</th>
+                                                <th>Coordinate</th>
+                                                <th>Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-success">
+                                                <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                                        data-placement="bottom" title="点击可以更新车辆状态">
+                                                        001
+                                                    </button></td>
+                                                <td>RX</td>
+                                                <td id="TX_Coordinate">(13.5,6.2)</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr class="table-danger">
+                                                <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                        data-placement="bottom" title="点击可以更新车辆状态">
+                                                        002
+                                                    </button></td>
+                                                <td>TX</td>
+                                                <td id="RX_Coordinate">(14.5,7.5)</td>
+                                                <td>A</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                                    aria-expanded="false" aria-controls="collapseTwo">
+                                    地图建筑信息
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div style="height: 400px" class="card card-success">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr class="active">
+                                                <th>Car ID</th>
+                                                <th>State</th>
+                                                <th>Coordinate</th>
+                                                <th>Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-success">
+                                                <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                                        data-placement="bottom" title="点击可以更新车辆状态">
+                                                        001
+                                                    </button></td>
+                                                <td>RX</td>
+                                                <td id="TX_Coordinate">(13.5,6.2)</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr class="table-danger">
+                                                <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                        data-placement="bottom" title="点击可以更新车辆状态">
+                                                        002
+                                                    </button></td>
+                                                <td>TX</td>
+                                                <td id="RX_Coordinate">(14.5,7.5)</td>
+                                                <td>A</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+                                    aria-expanded="false" aria-controls="collapseThree">
+                                    日志输出
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div style="height: 400px" class="card card-success">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr class="active">
+                                                <th>Car ID</th>
+                                                <th>State</th>
+                                                <th>Coordinate</th>
+                                                <th>Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-success">
+                                                <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
+                                                        data-placement="bottom" title="点击可以更新车辆状态">
+                                                        001
+                                                    </button></td>
+                                                <td>RX</td>
+                                                <td id="TX_Coordinate">(13.5,6.2)</td>
+                                                <td>A</td>
+                                            </tr>
+                                            <tr class="table-danger">
+                                                <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                        data-placement="bottom" title="点击可以更新车辆状态">
+                                                        002
+                                                    </button></td>
+                                                <td>TX</td>
+                                                <td id="RX_Coordinate">(14.5,7.5)</td>
+                                                <td>A</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        <!--  -->
+    </div>
+    <div class="collapse position-absolute" id="collapseExample01" style="bottom:0px;right: 0px;">
+        <div class="card card-body">
+            <!--数据展示部分 container-->
+            <div class="container">
+                <div class="card card-success">
+                    <div class="btn-group btn-group-sm">
+                        <button id="pathloss" type="button" class="btn btn-primary">路径损耗</button>
+                        <button id="powerdelay" type="button" class="btn btn-secondary">功率时延分布</button>
+                        <button id="meandelay" type="button" class="btn btn-success">平均附加时延</button>
+                        <button id="dimpowerdelay" type="button" class="btn btn-danger">功率时延空间分布</button>
+                    </div>
+                    <div id="main" style="width:600px;height:400px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <canvas id="locationCanvas" class="position-absolute" width="200" height="40" style="border:1px solid #c3c3c3;top: 70px;right: 20px;color: white;">
+        Your browser does not support the canvas element.
+    </canvas>
+    <!-- Modal 模态框-->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Open File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <h5><span class="badge badge-secondary">shp文件:</span></h5>
+                                <input type="file" class="form-control-file" id="file-input">
+                                <hr>
+                                <h5><span class="badge badge-secondary">dbf文件:</span></h5>
+                                <input type="file" class="form-control-file" id="dbf-file-input">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="parseFile()" data-dismiss="modal">Open</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="roadfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roadfilelabel">Open File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <h5><span class="badge badge-secondary">shp文件:</span></h5>
+                                <input type="file" class="form-control-file" id="road-file-input">
+                                <hr>
+                                <h5><span class="badge badge-secondary">dbf文件:</span></h5>
+                                <input type="file" class="form-control-file" id="road-dbf-file-input">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="parseRoadFile()" data-dismiss="modal">Open</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--导入js-->
+    <script type="text/javascript" src="js/three.js"></script>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/TDSLoader.js"></script>
+    <script type="text/javascript" src="js/tether.min.js"></script>
+    <script src="js/controls/DragControls.js"></script>
+    <script src="js/controls/TrackballControls.js"></script>
+    <script src="js/Lut.js"></script>
+    <script src="js/Sky.js"></script>
+
+
+    <script src="js/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="js/bootstrap.min.js"></script>
+    <!--websocket-->
+    <script type="text/javascript">
+
+        // $(function () {
+        //     $('[data-submenu]').submenupicker();
+        // });
+        var sendCode;
+        function debug(message) {
+            console.log(message);
+        }
+
+        function sendMessage(msg) {
+            if (websocket != null) {
+                websocket.send(msg);
+                console.log("string sent :", '"' + msg + '"');
+            } else {
+                //initWebSocket();
+                websocket.send(msg);
+                console.log("string sent :", '"' + msg + '"');
+            }
+            sendCode = msg;
+            // stopWebSocket();
+        }
+
+        var wsUri = "ws://localhost:1234";
+        var websocket = null;
+        initWebSocket();
+
+        function initWebSocket() {
+            try {
+                if (typeof MozWebSocket == 'function')
+                    WebSocket = MozWebSocket;
+                if (websocket && websocket.readyState == 1)
+                    websocket.close();
+                websocket = new WebSocket(wsUri);
+                websocket.onopen = function (evt) {
+                    // sendMessage("1");
+                    debug("CONNECTED");
+                };
+                websocket.onclose = function (evt) {
+                    debug("DISCONNECTED");
+                };
+                websocket.onmessage = function (evt) {
+                    console.log("Message received :", evt.data);
+                    var data = JSON.parse(evt.data);
+                    console.log(data.type);
+                    if(data.type == "output"){
+                        drawPath(data);
+                    }
+                    // if (sendCode == "1") {
+                    //     readFromDataToArray(evt.data);
+                    //     sendMessage("cordinate");
+                    // } else if (sendCode == "2") {
+                    //     drawPath(evt.data);
+                    // }else if(sendCode == "3"){
+                    //     drawRoad(evt.data);
+                    // }else if (sendCode == "cordinate"){
+                    //     processCordinate(evt.data);
+                    // }
+                    //debug(evt.data);
+                };
+                websocket.onerror = function (evt) {
+                    debug('ERROR: ' + evt.data);
+                };
+            } catch (exception) {
+                debug('ERROR: ' + exception);
+            }
+        }
+
+        function stopWebSocket() {
+            if (websocket)
+                websocket.close();
+        }
+
+        function checkSocket() {
+            if (websocket != null) {
+                var stateStr;
+                switch (websocket.readyState) {
+                    case 0: {
+                        stateStr = "CONNECTING";
+                        break;
+                    }
+                    case 1: {
+                        stateStr = "OPEN";
+                        break;
+                    }
+                    case 2: {
+                        stateStr = "CLOSING";
+                        break;
+                    }
+                    case 3: {
+                        stateStr = "CLOSED";
+                        break;
+                    }
+                    default: {
+                        stateStr = "UNKNOW";
+                        break;
+                    }
+                }
+                debug("WebSocket state = " + websocket.readyState + " ( " + stateStr + " )");
+            } else {
+                debug("WebSocket is null");
+            }
+        }
+    </script>
+
+    <!--echart-->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var button1 = document.getElementById("pathloss");
+        var button2 = document.getElementById("powerdelay");
+        var button3 = document.getElementById("meandelay");
+        var button4 = document.getElementById("dimpowerdelay");
+
+        var myChart = echarts.init(document.getElementById("main"));
+        button4.onclick = function (ev) {
+            loadDimenPowerDelay();
+        };
+        button3.onclick = function (ev) {
+            console.log("b3");
+            loadbutton2();
+        };
+
+
+
+        function loadbutton2() {
+            option = {
+                title: {
+                    text: '平均附加时延',
+                    subtext: '附加时延'
+                },
+                tooltip: {},
+                backgroundColor: '#fff',
+                visualMap: {
+                    show: false,
+                    dimension: 2,
+                    min: -1,
+                    max: 1,
+                    inRange: {
+                        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    }
+                },
+                xAxis3D: {
+                    type: 'value'
+                },
+                yAxis3D: {
+                    type: 'value'
+                },
+                zAxis3D: {
+                    type: 'value'
+                },
+                grid3D: {
+                    viewControl: {
+                        // projection: 'orthographic'
+                    }
+                },
+                series: [{
+                    type: 'surface',
+                    wireframe: {
+                        // show: false
+                    },
+                    equation: {
+                        x: {
+                            step: 0.05
+                        },
+                        y: {
+                            step: 0.05
+                        },
+                        z: function (x, y) {
+                            if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) {
+                                return '-';
+                            }
+                            return Math.sin(x * Math.PI) * Math.sin(y * Math.PI);
+                        }
+                    }
+                }]
+            };
+            myChart.setOption(option);
+        }
+
+
+        function loadDimenPowerDelay() {
+            myChart.setOption({
+                title: {
+                    text: '功率时延空间分布',
+                    subtext: '功率时延空间分布'
+                },
+                grid3D: {},
+                xAxis3D: {},
+                yAxis3D: {},
+                zAxis3D: {},
+                series: [{
+                    type: 'scatter3D',
+                    symbolSize: 1,
+                    data: [
+                        [-1, -1, -1],
+                        [0, 0, 0],
+                        [1, 1, 1]
+                    ],
+                    itemStyle: {
+                        opacity: 1
+                    }
+                }]
+            });
+        }
+
+        function loadPathLoss(pathLossOrder, pathLoss) {
+            // 指定图表的配置项和数据
+            option = {
+                title: {
+                    text: 'Ray-Tracing 路径损耗',
+                    subtext: '路径损耗分布'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['路径损耗']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false
+                        },
+                        magicType: {
+                            show: true,
+                            type: ['line', 'bar']
+                        },
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                calculable: true,
+                xAxis: [{
+                    type: 'category',
+                    data: pathLossOrder
+                }],
+                yAxis: [{
+                    type: 'value'
+                }],
+                series: [{
+                    name: '路径损耗/dB',
+                    type: 'bar',
+                    data: pathLoss,
+                    markPoint: {
+                        data: [{
+                            type: 'max',
+                            name: '最大值'
+                        }, {
+                            type: 'min',
+                            name: '最小值'
+                        }]
+                    },
+                    markLine: {
+                        data: [{
+                            type: 'average',
+                            name: '平均值'
+                        }]
+                    }
+                }]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+    </script>
+
+    <!--webgl-->
+    <script type="text/javascript">
+        //检测webgl的支持情况
+        if (!Detector.webgl) {
+            Detector.addGetWebGLMessage();
+        }
+
+        var container;
+        var camera, scene, renderer;
+        //用于轨道控制器
+        var orbitControls, clock, delta;
+        //loadXMLDoc();
+
+        var mouse, raycaster, isShiftDown = false;
+        var rollOverMesh, rollOverMaterial, rollOverGeo;
+        var cubeMesh;
+        var objects = []; //存放平面，用于投影检测
+        var builidings  = [];  //存放建筑物
+        var tx = [], rx = [];
+        var pathLines = [];
+        var roadLines = [];
+        var xmax , xmin , ymax , ymin ;
+
+        var TxDTO;
+        var RxDTO;
+
+        var lut;
+        main();
+
+        render();
+        loadPathLoss([1, 2, 3, 4, 5, 6], [-100, -101, -102, -103, -99, -98]);
+
+        function drawSenario(senario,mod) {
+
+            var xmin = senario.bbox[0];
+            var ymin = senario.bbox[1];
+            var xmax = senario.bbox[2];
+            var ymax = senario.bbox[3];
+            var pointX = [];
+            var pointY = [];
+            var pointZ = [];
+            for (var i = 0; i < senario.features.length; i++) {
+                var pointXX = [];
+                var pointYY = [];
+                var coords = senario.features[i].coordinates;
+                for (var j = 0; j < coords.length; j++) {
+                    var x = coords[j][0];
+                    var y = coords[j][1];
+                    pointXX.push((x - (xmax + xmin) / 2) / (xmax - xmin) * 80);
+                    pointYY.push((y - (ymax + ymin) / 2) / (xmax - xmin) * 80);
+                    // pointXX.push(  (x - xmin)/(xmax - xmin) * 80 );
+                    // pointYY.push(  (y - ymin)/(xmax - xmin) * 80 );
+                }
+                pointX.push(pointXX);
+                pointY.push(pointYY);
+                pointZ.push((senario.features[i].z) / 80 * (118.813658 - 118.728997) / (xmax - xmin));
+
+            }
+            for (var i = 0; i < pointX.length; i++) {
+                addMulGeometry(pointX[i], pointY[i], pointZ[i],mod);
+            }
+
+        }
+        function setTx() {
+            orbitControls.enabled = false;
+            // roll-over helpers
+            rollOverGeo = new THREE.BoxBufferGeometry(1, 0.5, 0.7);
+            rollOverMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, opacity: 0.5, transparent: true });
+            rollOverMesh = new THREE.Mesh(rollOverGeo, rollOverMaterial);
+            scene.add(rollOverMesh);
+
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            document.addEventListener('mousedown', onDocumentMouseDown, false);
+            document.addEventListener('keydown', onDocumentKeyDown, false);
+            document.addEventListener('keyup', onDocumentKeyUp, false);
+        }
+        function hide( objs) {
+            for (let i = 0; i < objs.length; i++) {
+                scene.remove(scene.getObjectByName(objs[i].name));
+            }
+        }
+        function remove(objs) {
+            hide(objs);
+            var len = objs.length;
+            objs = [];
+        }
+        function resume(objs) {
+            if (objs.size == 0){
+                return;
+            }
+            for (let i = 0; i < objs.length; i++) {
+                scene.add(objs[i]);
+            }
+        }
+        function reset() {
+            remove(tx);
+            remove(rx);
+            remove(pathLines);
+            container2.parentNode.removeChild(container2);
+        }
+
+        function setRx() {
+
+            orbitControls.enabled = false;
+            // roll-over helpers
+            rollOverGeo = new THREE.BoxBufferGeometry(1, 0.5, 0.7);
+            rollOverMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, opacity: 0.5, transparent: true });
+            rollOverMesh = new THREE.Mesh(rollOverGeo, rollOverMaterial);
+            scene.add(rollOverMesh);
+
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            document.addEventListener('mousedown', onDocumentMouseDown2, false);
+
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function processCordinate(result) {
+            var obj = JSON.parse(result);
+            xmax = obj.xmax;
+            xmin = obj.xmin;
+            ymax = obj.ymax;
+            ymin = obj.ymin;
+        }
+
+        function drawRoad(roads){
+            console.log("ok");
+            // console.log(roads);
+
+            for (let i = 0; i < roads.length; i++){
+                var geometry = new THREE.Geometry();
+                var material = new THREE.LineBasicMaterial( { vertexColors: true } );
+                var color1 = new THREE.Color( 0x444444 ), color2 = new THREE.Color( 0xFF0000 );
+                var coordinates = roads[i].coordinates;
+                for(let j = 0; j < roads[i].coordinates.length - 1; j++){
+                    var p1 = coordinates[j], p2 = coordinates[j+1];
+                    var x1 = (p1[0] - (xmax + xmin)/ 2)/(xmax - xmin) * 80;
+                    var y1 = (p1[1] - (ymax + ymin)/ 2)/(xmax - xmin) * 80;
+                    var x2 = (p2[0] - (xmax + xmin)/ 2)/(xmax - xmin) * 80;
+                    var y2 = (p2[1] - (ymax + ymin)/ 2)/(xmax - xmin) * 80;
+                    var q1 = new THREE.Vector3(y1, 0, x1);
+                    var q2 = new THREE.Vector3(y2, 0, x2);
+                    geometry.vertices.push(q1);
+                    geometry.vertices.push(q2);
+                    geometry.colors.push( color1, color2 );
+                    var line = new THREE.Line( geometry, material, THREE.LineSegments );
+                    scene.add(line);
+                }
+
+            }
+
+        }
+
+
+        function loadLegends(colorMap, numberOfColors, legendLayout){
+
+            lut = new THREE.Lut( colorMap, numberOfColors );
+
+            lut.setMax( 2000 );
+            lut.setMin( 1000 );
+
+            if ( legendLayout ) {
+
+                var legend;
+
+                if ( legendLayout === 'horizontal' ) {
+
+                    legend = lut.setLegendOn( { 'layout':'horizontal', 'position': { 'x': 0, 'y': -3, 'z': 3} } );
+
+                } else {
+
+                    legend = lut.setLegendOn();
+                }
+
+                scene.add ( legend );
+
+                var labels = lut.setLegendLabels( { 'title': 'PathLoss', 'um': 'dB', 'ticks': 5 } );
+
+                scene.add ( labels['title'] );
+
+                for ( var i = 0; i < Object.keys( labels[ 'ticks' ] ).length; i ++ ) {
+
+                    scene.add ( labels[ 'ticks' ][ i ] );
+                    scene.add ( labels[ 'lines' ][ i ] );
+
+                }
+
+            }
+        }
+      
+        function drawPath(data) {
+            initColorMap(-200,-70);
+            var paths = data.paths;
+            for (var p in paths) {
+                var path = paths[p];
+                var nodeList = path.nodeList;
+                var geometry = new THREE.Geometry();
+                var material = new THREE.LineBasicMaterial({ vertexColors: true });
+                var color1 = new THREE.Color(0x444444), color2 = new THREE.Color(0xFF0000);
+                var color = lut.getColor( path.pathloss );
+                console.log(color);
+                for (let i = 0; i < nodeList.length; i++) {
+                    nodeList[i].x = (nodeList[i].x - (xmax + xmin) / 2)/(xmax - xmin) *80;
+                    nodeList[i].y = (nodeList[i].y - (ymax + ymin)/ 2)/(xmax - xmin) * 80;
+                }
+                for (let i = 0; i < nodeList.length - 1; i++) {
+                    var p1 = new THREE.Vector3(nodeList[i].y, 0.5, nodeList[i].x);
+                    var p2 = new THREE.Vector3(nodeList[i + 1].y, 0.5, nodeList[i + 1].x);
+                    geometry.vertices.push(p1);
+                    geometry.vertices.push(p2);
+                    geometry.colors.push(color,color);
+                    var line = new THREE.Line(geometry, material, THREE.LineSegments);
+                    line.name = Math.random().toString(36).substr(2);
+                    scene.add(line);
+                    pathLines.push(line);
+                }
+            }
+
+        }
+        function readFromDataToArray(result) {
+            var obj = JSON.parse(result);
+            console.log(obj[0][0].x)
+            console.log(obj[0][0].y)
+            //console.log(obj.length)
+            var pointX = [];
+            var pointY = [];
+            var pointZ = [];
+
+            for (var p in obj) {
+                var data = obj[p];
+                var pointXX = [];
+                var pointYY = [];
+                for (var i = 0; i < data.length; i++) {
+                    pointXX.push(data[i].x);
+                    pointYY.push(data[i].y);
+                }
+
+                pointX.push(pointXX);
+                pointY.push(pointYY);
+                pointZ.push(data[0].z);
+            }
+            // for (var i = 0; i < 261; i++) {
+            //     var pointXX = [];
+            //     var pointYY = [];
+            //     for (var j = obj[i].length - 1; j >= 0; j--) {
+            //         pointXX.push(obj[i][j].x);
+            //         pointYY.push(obj[i][j].y);
+            //     }
+            //
+            //     pointX.push(pointXX);
+            //     pointY.push(pointYY);
+            //     pointZ.push(obj[i][0].z);
+            // }
+            for (var i = 0; i < pointX.length; i++) {
+                addMulGeometry(pointX[i], pointY[i], pointZ[i]);
+            }
+        }
+
+        function loadPathLossGet() {
+            var xmlhttp;
+            if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else { // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var result = xmlhttp.responseText;
+                    console.log(result);
+                    //document.getElementById("myDiv").innerHTML=result;
+                    var obj = JSON.parse(result);
+                    console.log(obj.length);
+                    var pathLossT = [];
+                    var pathLossOrder = [];
+                    for (var i = 0; i < obj.length; i++) {
+                        pathLossT.push(obj[i]);
+                        pathLossOrder.push(i);
+                    }
+                    //loadDimenPowerDelay();
+                    loadPathLoss(pathLossOrder, pathLossT);
+                }
+            }
+            xmlhttp.open("GET", "http://localhost:8080/user/getPathLoss.html", true);
+            xmlhttp.send();
+        }
+
+        //主函数
+        function loadXMLDoc() {
+            var xmlhttp;
+            if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else { // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var result = xmlhttp.responseText;
+                    //document.getElementById("myDiv").innerHTML=result;
+                    var obj = JSON.parse(result);
+                    console.log(obj[0][0].x)
+                    console.log(obj[0][0].y)
+                    //console.log(obj.length)
+                    var pointX = [];
+                    var pointY = [];
+                    var pointZ = [];
+                    for (var i = 0; i < 261; i++) {
+                        var pointXX = [];
+                        var pointYY = [];
+                        for (var j = obj[i].length - 1; j >= 0; j--) {
+                            pointXX.push(obj[i][j].x);
+                            pointYY.push(obj[i][j].y);
+                        }
+                        pointX.push(pointXX);
+                        pointY.push(pointYY);
+                        pointZ.push(obj[i][0].z);
+                    }
+                    main(pointX, pointY, pointZ);
+                    render();
+                    loadPathLossGet();
+
+                    //alert(obj[0].length);
+                }
+            }
+            xmlhttp.open("GET", "http://localhost:8080/user/hello.html", true);
+            xmlhttp.send();
+        }
+
+        function load3DS(intersect, type) {
+            var loader = new THREE.TDSLoader();
+            loader.load("./Evo.3ds", function (object) {
+                object.traverse(function (child) {
+                    if (child instanceof THREE.Mesh) {
+                        child.material.side = THREE.DoubleSide;
+                        //child.material.normalMap = normal;
+                    }
+                });
+                object.scale.set(0.002, 0.002, 0.002);
+                object.position.copy(intersect.point);
+                object.rotateX(Math.PI * 6 / 4);
+                object.rotateZ(Math.PI * 6 / 4);
+                object.name = Math.random().toString(36).substr(2);
+                scene.add(object);
+                if (type == "tx") {
+                    tx.push(object);
+                } else if (type == "rx") {
+                    rx.push(object);
+                }
+
+            });
+        }
+
+        var container2;
+        var scene2;
+        var lut;
+        var renderer2;
+        var camera2;
+
+        function initColorMap(min, max){
+            container2 = document.createElement('colorMap');
+            document.body.appendChild(container2);
+            var width = 120;
+            var height = 300;
+            scene2 = new THREE.Scene(); //创建一个新场景
+            //添加一个透视相机
+            // CAMERA
+            camera2 = new THREE.PerspectiveCamera( 16,width /height, 1, 100 );
+            camera2.position.set( 0, 0,  10);
+            //渲染
+            //antialias:true增加抗锯齿效果
+            renderer2 = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            var colorMap = 'rainbow';
+            var numberOfColors = 512;
+            lut = new THREE.Lut( colorMap, numberOfColors );
+            lut.setMax( max );
+            lut.setMin( min );
+            var legend = lut.setLegendOn( { 'position': { 'x': -0.3, 'y': -0.1, 'z': -5 }} );
+            var labels = lut.setLegendLabels( { 'title': 'PathLoss', 'um': 'dB', 'ticks': 5 } );
+            // renderer2.setClearColor(new THREE.Color(0xffffff)); //设置窗口背景颜色为黑
+            renderer2.setClearAlpha(0);
+            renderer2.setSize(width, height); //设置窗口尺寸
+            //将renderer关联到container，这个过程类似于获取canvas元素
+            container2.appendChild(renderer2.domElement);
+            container2.style.position = "absolute";
+            container2.style.bottom = "100px";
+            container2.style.right = "30px";
+            scene2.add( legend );
+            scene2.add( labels[ 'title' ] );
+            for ( var i = 0; i < Object.keys( labels[ 'ticks' ] ).length; i ++ ) {
+                scene2.add( labels[ 'ticks' ][ i ] );
+                scene2.add( labels[ 'lines' ][ i ] );
+            }
+            renderer2.render(scene2, camera2);
+        }
+
+
+
+
+        // render2();
+        function main() {
+            //添加一个div元素
+            container = document.getElementById('webgl')
+            //document.body.appendChild(container);
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            console.log(document.documentElement);
+            scene = new THREE.Scene(); //创建一个新场景
+            //添加一个透视相机
+            camera = new THREE.PerspectiveCamera(30,
+                width / height, 1, 1000);
+            camera.position.set(-100, 300, -100); //设置相机位置
+            camera.lookAt(new THREE.Vector3(0, 0, 0)); //让相机指向原点
+            //渲染
+            //antialias:true增加抗锯齿效果
+            renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+            renderer.setClearColor(new THREE.Color(0xffffff)); //设置窗口背景颜色为黑
+            renderer.setSize(width, height); //设置窗口尺寸
+            //将renderer关联到container，这个过程类似于获取canvas元素
+            // var threejsDiv=renderer.domElement;
+            // threejsDiv.setAttribute("class","h-100 w-100");
+            container.appendChild(renderer.domElement);
+
+            //添加轨道控制器
+            // 新建一个轨道控制器
+            orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+            orbitControls.target = new THREE.Vector3(0, 0, 0); //控制焦点
+            orbitControls.autoRotate = false; //将自动旋转关闭
+            clock = new THREE.Clock(); //用于更新轨道控制器
+            //给场景添加光源
+            //自然光
+            var ambientLight = new THREE.AmbientLight(0x606060);
+            scene.add(ambientLight);
+            //平行光源
+            var directionalLight = new THREE.DirectionalLight(0xffffff);
+            directionalLight.position.set(1, 0.75, 0.5).normalize();
+            //var sky=new Sky();
+            // var sky = new THREE.Sky();
+			// 	sky.scale.setScalar( 450000 );
+			// 	scene.add( sky );
+            scene.add(directionalLight);
+            plane();
+            var gridHelper = new THREE.GridHelper( 80, 30 );
+            // scene.add( gridHelper );
+            window.addEventListener('resize', onWindowResize, false);
+            // dragControlInit();
+            //  var gridHelper = new THREE.GridHelper( 50, 100 );
+            //  scene.add( gridHelper );
+        }
+
+
+        function plane() {
+            var geometry = new THREE.PlaneBufferGeometry(100, 100);
+            geometry.rotateX(- Math.PI / 2);
+            plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#696969", visible: true }));
+            scene.add(plane);
+            objects.push(plane);
+        }
+
+        //创建一个立方体
+        function cube() {
+            //THREE.CubeGeometry(width,height,depth,widthSegments,heightSegments, depthSegments)
+            var cubeGeo = new THREE.CubeGeometry(20, 20, 10, 15, 5, 5); //创建立方体
+            var cubeMat = new THREE.MeshLambertMaterial({ //创建材料
+                color: 0x003300,
+                wireframe: false
+            });
+            cubeMesh = new THREE.Mesh(cubeGeo, cubeMat); //创建立方体网格模型
+            cubeMesh.position.set(20, 10, 0); //设置立方体的坐标 几何中心
+            scene.add(cubeMesh); //将立方体添加到场景中
+        }
+
+        //创建一个球
+        function sphere() {
+            var sphereGeo = new THREE.SphereGeometry(16, 40, 40); //创建球体
+            var sphereMat = new THREE.MeshLambertMaterial({ //创建材料
+                color: 0x0000FF,
+                wireframe: false
+            });
+            var sphereMesh = new THREE.Mesh(sphereGeo, sphereMat); //创建球体网格模型
+            sphereMesh.position.set(-25, 16, 0); //设置球的坐标
+            scene.add(sphereMesh); //将球体添加到场景
+        }
+
+        //创建圆柱体
+        function cylinder() {
+            //创建圆柱体
+            var cylinderGeo = new THREE.CylinderGeometry(15, 15, 40, 40, 40);
+            var cylinderMat = new THREE.MeshLambertMaterial({ //创建材料
+                color: 0xFF6600,
+                wireframe: false
+            });
+            //创建圆柱体网格模型
+            var cylinderMesh = new THREE.Mesh(cylinderGeo, cylinderMat);
+            cylinderMesh.position.set(0, 20, -40); //设置圆柱坐标
+            scene.add(cylinderMesh); //向场景添加圆柱体
+        }
+
+
+        //画线段
+        function line() {
+            var geometry = new THREE.Geometry();
+            var material = new THREE.LineBasicMaterial({ vertexColors: true });
+            var color1 = new THREE.Color(0x444444), color2 = new THREE.Color(0xFF0000);
+
+            // 线的材质可以由2点的颜色决定
+            var p1 = new THREE.Vector3(-25, 2, -25);
+            var p2 = new THREE.Vector3(25, 2, -25);
+            geometry.vertices.push(p1);
+            geometry.vertices.push(p2);
+            geometry.colors.push(color1, color2);
+            var line1 = new THREE.Line(geometry, material, THREE.LineSegments);
+            scene.add(line1);
+
+            p1 = new THREE.Vector3(-25, 2, -25);
+            p2 = new THREE.Vector3(-25, 2, 25);
+            geometry.vertices.push(p1);
+            geometry.vertices.push(p2);
+            geometry.colors.push(color1, color2);
+            var line2 = new THREE.Line(geometry, material, THREE.LineSegments);
+            scene.add(line2);
+
+
+            p1 = new THREE.Vector3(25, 2, 25);
+            p2 = new THREE.Vector3(-25, 2, 25);
+            geometry.vertices.push(p1);
+            geometry.vertices.push(p2);
+            geometry.colors.push(color1, color2);
+            line3 = new THREE.Line(geometry, material, THREE.LineSegments);
+            scene.add(line3);
+
+            p1 = new THREE.Vector3(25, 2, 25);
+            p2 = new THREE.Vector3(25, 2, -25);
+            geometry.vertices.push(p1);
+            geometry.vertices.push(p2);
+            geometry.colors.push(color1, color2);
+            var line4 = new THREE.Line(geometry, material, THREE.LineSegments);
+            scene.add(line4);
+
+
+            scene.add(line);
+        }
+        // 创建建筑
+
+        function addMulGeometry(arrZ, arrX, height, mod) {
+            // var arrX=[4,0,0,2.5,4];
+            // var arrZ=[4,4,0,-2,0];
+            // var height=4;
+            var arrLength = arrX.length;
+            var city = [];
+            for (var i = 0; i < arrLength; i++) {
+                city.push(new THREE.Vector2(arrZ[i],arrX[i]));
+            }
+            var depth = 0;
+            if (mod == "3d"){
+                depth = height;
+            }
+            var extrudeSettings = { depth: depth, bevelEnabled: false};
+            var cityShape = new THREE.Shape(city);
+            var points = cityShape.getPoints();
+
+            var geometryPoints = new THREE.BufferGeometry().setFromPoints( points );
+            // solid line
+            var line = new THREE.Line( geometryPoints, new THREE.LineBasicMaterial( { color: 0x8DEEEE } ) );
+
+            var particles = new THREE.Points( geometryPoints, new THREE.PointsMaterial( { color: '081469', size : 0.5 } ) );
+
+
+            var geometry = new THREE.ExtrudeBufferGeometry( cityShape, extrudeSettings );
+            var material = new THREE.MeshLambertMaterial({ //创建材料
+                color: 0x8DEEEE,
+                wireframe: false
+            });
+            var mesh = new THREE.Mesh( geometry,  material);
+            mesh.rotation.x = -Math.PI / 2;
+            mesh.rotation.z = -Math.PI / 2;
+            mesh.name = "bd" + Math.random().toString(36).substr(2);
+            builidings.push(mesh);
+
+            line.rotation.x = -Math.PI / 2;
+            line.rotation.z = -Math.PI / 2;
+
+            particles.rotation.x = -Math.PI / 2;
+            particles.rotation.z = -Math.PI / 2;
+            scene.add(mesh);
+            scene.add(line);
+            // scene.add(particles);
+        }
+
+        function addMulGeometryText() {
+            var arrX = [67.18841944111367, 65.17594444951699, 56.737672119402966, 58.75014711099965];
+            var arrZ = [157.04366246983577, 152.91279275128568, 155.91385194907826, 160.0447216678792];
+            var height = 24;
+            var arrLength = arrX.length;
+            var geometry = new THREE.Geometry();
+            for (var i = 0; i < arrLength; i++) {
+                geometry.vertices.push(new THREE.Vector3(arrX[i], height, arrZ[i]));
+            }
+            for (var i = 0; i < arrLength; i++) {
+                geometry.vertices.push(new THREE.Vector3(arrX[i], 0, arrZ[i]));
+            }
+            for (var i = 0; i < arrLength; i++) {
+                if (i + arrLength + 1 == 2 * arrLength) {
+                    geometry.faces.push(new THREE.Face3(i, (i + 1) % arrLength, arrLength));
+                    geometry.faces.push(new THREE.Face3(i, arrLength, i + arrLength));
+                } else {
+                    geometry.faces.push(new THREE.Face3(i, (i + 1) % arrLength, i + arrLength + 1));
+                    geometry.faces.push(new THREE.Face3(i, i + arrLength + 1, i + arrLength));
+                }
+            }
+            for (var i = 0; i < arrLength - 2; i++) {
+                geometry.faces.push(new THREE.Face3(0, i + 2, i + 1));
+            }
+            for (var i = 0; i < arrLength - 2; i++) {
+                geometry.faces.push(new THREE.Face3(arrLength, arrLength + i + 1, arrLength + i + 2));
+            }
+            geometry.computeFaceNormals();
+            var material = new THREE.MeshLambertMaterial({ //创建材料
+                color: 0xffff00,
+                wireframe: false
+            });
+            var mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+        }
+
+        function addOwnGeometry() {
+            var arrX = [0, 0, 4, 4];
+            var arrY = [0, 4, 4, 0];
+            var height = 4;
+            var arrLength = arrX.length;
+            // 创建一个立方体
+            //    v6----- v5
+            //   /|      /|
+            //  v1------v0|
+            //  | |     | |
+            //  | |v7---|-|v4
+            //  |/      |/
+            //  v2------v3
+            var geometry = new THREE.Geometry();
+            //创建立方体的顶点
+            //[x,y,z]
+            //
+            //        |y
+            //        |
+            //     (0,0,0)------x
+            //       /
+            //      /z
+            var vertices = [
+                new THREE.Vector3(10, 10, 10), //v0
+                new THREE.Vector3(-10, 10, 10), //v1
+                new THREE.Vector3(-10, -10, 10), //v2
+                new THREE.Vector3(10, -10, 10), //v3
+                new THREE.Vector3(10, -10, -10), //v4
+                new THREE.Vector3(10, 10, -10), //v5
+                new THREE.Vector3(-10, 10, -10), //v6
+                new THREE.Vector3(-10, -10, -10) //v7
+            ];
+
+            geometry.vertices = vertices;
+            //创建立方的面
+            var faces = [
+                new THREE.Face3(0, 1, 2),
+                new THREE.Face3(0, 2, 3),
+                new THREE.Face3(0, 3, 4),
+                new THREE.Face3(0, 4, 5),
+                new THREE.Face3(1, 6, 7),
+                new THREE.Face3(1, 7, 2),
+                new THREE.Face3(6, 5, 4),
+                new THREE.Face3(6, 4, 7),
+                new THREE.Face3(5, 6, 1),
+                new THREE.Face3(5, 1, 0),
+                new THREE.Face3(3, 2, 7),
+                new THREE.Face3(3, 7, 4)
+            ];
+
+            geometry.faces = faces;
+            //geometry.faces.push(new THREE.Face4(0, 1, 2, 3));
+            // for(var i=0;i<arrLength;i++){
+            //     geometry.vertices.push(new THREE.Vector3(arrX[i], arrY[i], height));
+            // }
+            // for(var i=0;i<arrLength;i++){
+            //     geometry.vertices.push(new THREE.Vector3(arrX[i], arrY[i], 0));
+            // }
+
+            // for(var i=1;i<=arrLength-1;i++){
+            //     geometry.faces.push(new THREE.Face3(0, i, (i+1)%arrLength));
+            // }
+
+            // for(var i=0;i<arrLength-1;i++){
+            //     var temp=[i,(i+1)%arrLength,i+arrLength,(i+arrLength+1)]
+            //     // temp[3]=temp[1]+arrLength
+            //     geometry.faces.push(new THREE.Face3(temp[0], temp[1], temp[2]));
+            //     geometry.faces.push(new THREE.Face3(temp[0], temp[1], temp[3]));
+            //     geometry.faces.push(new THREE.Face3(temp[1], temp[2], temp[3]));
+
+            // }
+            // var temp=[0,arrLength-1,arrLength,arrLength*2-1]
+            // geometry.faces.push(new THREE.Face3(temp[0], temp[1], temp[2]));
+            // geometry.faces.push(new THREE.Face3(temp[0], temp[1], temp[3]));
+            // geometry.faces.push(new THREE.Face3(temp[1], temp[2], temp[3]));
+
+            // for(var i=1;i<=arrLength-2;i++){
+            //     geometry.faces.push(new THREE.Face3(0+arrLength, i+arrLength, i+1+arrLength));
+            // }
+            // for(var i=0;i<=arrLength-2;i++){
+            //     geometry.faces.push(new THREE.Face3(i, i+1, (i+2)%arrLength));
+            // }
+            // for(var i=0;i<=arrLength-2;i++){
+            //     geometry.faces.push(new THREE.Face3(i+arrLength, i+1+arrLength, (i+2)%arrLength+arrLength));
+            // }
+            geometry.computeFaceNormals();
+            var material = new THREE.MeshLambertMaterial({ //创建材料
+                color: 0xffff00,
+                wireframe: false
+            });
+            var mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+        }
+
+        function addGeometry() {
+            var geometry = new THREE.Geometry();
+            // 设置顶点位置
+            // 顶部4顶点
+            geometry.vertices.push(new THREE.Vector3(-1, 2, -1));
+            geometry.vertices.push(new THREE.Vector3(1, 2, -1));
+            geometry.vertices.push(new THREE.Vector3(1, 2, 1));
+            geometry.vertices.push(new THREE.Vector3(-1, 2, 1));
+            // 底部4顶点
+            geometry.vertices.push(new THREE.Vector3(-2, 0, -2));
+            geometry.vertices.push(new THREE.Vector3(2, 0, -2));
+            geometry.vertices.push(new THREE.Vector3(2, 0, 2));
+            geometry.vertices.push(new THREE.Vector3(-2, 0, 2));
+
+            // 设置顶点连接情况
+            // 顶面
+            geometry.faces.push(new THREE.Face3(0, 1, 3));
+            geometry.faces.push(new THREE.Face3(1, 2, 3));
+            //          geometry.faces.push(new THREE.Face4(0, 1, 2, 3));
+            // 底面
+            geometry.faces.push(new THREE.Face3(4, 5, 6));
+            geometry.faces.push(new THREE.Face3(5, 6, 7));
+            //          geometry.faces.push(new THREE.Face4(4, 5, 6, 7));
+            // 侧面
+            geometry.faces.push(new THREE.Face3(1, 5, 6));
+            geometry.faces.push(new THREE.Face3(6, 2, 1));
+            geometry.faces.push(new THREE.Face3(2, 6, 7));
+            geometry.faces.push(new THREE.Face3(7, 3, 2));
+            geometry.faces.push(new THREE.Face3(3, 7, 0));
+            geometry.faces.push(new THREE.Face3(7, 4, 0));
+            geometry.faces.push(new THREE.Face3(0, 4, 5));
+            geometry.faces.push(new THREE.Face3(0, 5, 1));
+            var material = new THREE.MeshLambertMaterial({ //创建材料
+                color: 0xffff00,
+                wireframe: false
+            });
+            var mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+        }
+
+
+        function onDocumentMouseMove(event) {
+            event.preventDefault();
+            mouse.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
+            raycaster.setFromCamera(mouse, camera);
+            var intersects = raycaster.intersectObjects(objects);
+            var intersect;
+            if (intersects.length > 0) {
+                intersect = intersects[0];
+                rollOverMesh.position.copy(intersect.point).add(intersect.face.normal);
+                //rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
+            }
+            var canvas = document.getElementById("locationCanvas");
+            var cxt = canvas.getContext("2d");
+            cxt.font = "15px Arial";
+            cxt.clearRect(0, 0, 200, 40);
+            var x = intersect.point.z;
+            var y = intersect.point.x;
+
+            var longitude = x / 80 * (xmax - xmin) + (xmax + xmin) / 2;
+            var latitude = y / 80 * (xmax - xmin) + (ymax + ymin) / 2;
+
+            cxt.fillText(longitude, 10, 18);
+            cxt.fillText(latitude, 10, 33);
+            //render();
+        }
+        //设置TX
+        function onDocumentMouseDown(event) {
+            event.preventDefault();
+            mouse.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
+            raycaster.setFromCamera(mouse, camera);
+            var intersects = raycaster.intersectObjects(objects);
+            if (intersects.length > 0) {
+                var intersect = intersects[0];
+                load3DS(intersect, "tx");
+                scene.remove(rollOverMesh);
+                var x = intersect.point.z;
+                var y = intersect.point.x;
+                var longitude = x / 80 * (xmax - xmin) + (xmax + xmin) / 2;
+                var latitude = y / 80 * (xmax - xmin) + (ymax + ymin) / 2;
+                TxDTO = { "type": "tx", "longitude": longitude, "latitude": latitude };
+                $("#TX_Coordinate").html("(" + longitude + "," + latitude + ")");
+                var str = JSON.stringify(TxDTO);
+                //sendMessage(str);
+            }
+
+            orbitControls.enabled = true;
+            document.removeEventListener('mousemove', onDocumentMouseMove, false);
+            document.removeEventListener('mousedown', onDocumentMouseDown, false);
+
+        }
+
+        //设置RX
+        function onDocumentMouseDown2(event) {
+            event.preventDefault();
+            mouse.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
+            raycaster.setFromCamera(mouse, camera);
+            var intersects = raycaster.intersectObjects(objects);
+            if (intersects.length > 0) {
+                var intersect = intersects[0];
+                load3DS(intersect, "rx");
+                scene.remove(rollOverMesh);
+                var x = intersect.point.z;
+                var y = intersect.point.x;
+                var longitude = x / 80 * (xmax - xmin) + (xmax + xmin) / 2;
+                var latitude = y / 80 * (xmax - xmin) + (ymax + ymin) / 2;
+                RxDTO = { "type": "rx", "longitude": longitude, "latitude": latitude };
+                $("#RX_Coordinate").html("(" + longitude + "," + latitude + ")");
+                var str = JSON.stringify(RxDTO);
+                sendMessage(str);
+            }
+
+            orbitControls.enabled = true;
+            document.removeEventListener('mousemove', onDocumentMouseMove, false);
+            document.removeEventListener('mousedown', onDocumentMouseDown2, false);
+
+        }
+
+
+        function onDocumentKeyDown(event) {
+            switch (event.keyCode) {
+                case 16: isShiftDown = true; break;
+            }
+        }
+        function onDocumentKeyUp(event) {
+            switch (event.keyCode) {
+                case 16: isShiftDown = false; break;
+            }
+        }
+
+
+        //渲染
+        function render() {
+
+            delta = clock.getDelta();
+            orbitControls.update(delta);
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+
+    </script>
+
+
+    <!--read-file-->
+    <script src="https://unpkg.com/shapefile@0.6"></script>
+
+    <script>
+
+        var fileInput = document.getElementById('file-input');
+        var fileInput2 = document.getElementById('dbf-file-input');
+        var roadfileInput = document.getElementById('road-file-input');
+        var roadfileInput2 = document.getElementById('road-dbf-file-input');
+
+        var shpBuffer;
+        var dbfBuffer;
+
+        var features = [];
+        var senario = {};
+        var roads = [];
+
+        // 监听change事件:
+        fileInput.addEventListener('change', function () {
+
+
+            var file = fileInput.files[0];
+
+            if (!(file.name.endsWith('.shp'))) {
+                alert('Can only upload shp file.');
+                return false;
+            }
+            // 读取文件:
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                shpBuffer = e.target.result;
+
+            };
+            reader.readAsArrayBuffer(file);
+
+        });
+
+        roadfileInput.addEventListener('change', function () {
+
+
+            var file = roadfileInput.files[0];
+
+            if (!(file.name.endsWith('.shp') )) {
+                alert('Can only upload shp file.');
+                return false;
+            }
+            // 读取文件:
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                shpBuffer = e.target.result;
+
+            };
+            reader.readAsArrayBuffer(file);
+
+        });
+
+        fileInput2.addEventListener('change', function () {
+            var file = fileInput2.files[0];
+
+
+            if (!(file.name.endsWith('.dbf'))) {
+                alert('Can only upload dbf file.');
+                return false;
+            }
+            // 读取文件:
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                dbfBuffer = e.target.result;
+            };
+            reader.readAsArrayBuffer(file);
+
+        });
+
+        roadfileInput2.addEventListener('change', function () {
+            var file = roadfileInput2.files[0];
+
+
+            if (!(file.name.endsWith('.dbf') )) {
+                alert('Can only upload dbf file.');
+                return false;
+            }
+            // 读取文件:
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                dbfBuffer = e.target.result;
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+
+
+        function parseRoadFile() {
+
+            shapefile.open(shpBuffer,dbfBuffer,{ encoding : "GB2312"})
+                .then(source => source.read()
+                    .then(function log(result) {
+                        if (result.done) return;
+                        // console.log(result)
+                        var road = {
+                            coordinates : result.value.geometry.coordinates,
+                            name : result.value.properties.NAME
+                        }
+                        roads.push(road);
+                        return source.read().then(log);
+                    }).then(function () {
+                        if (xmin == undefined){
+                            xmin = source.bbox[0];
+                            ymin = source.bbox[1];
+                            xmax = source.bbox[2];
+                            ymax = source.bbox[3];
+                        }
+                    }).then(function () {
+                        drawRoad(roads);
+                    }))
+                .catch(error => console.error(error.stack));
+        }
+        function parseFile() {
+
+            remove(builidings);
+            var shp = "./file/BUILDING_nanjing.shp";
+            var dbf = "./file/BUILDING_nanjing.dbf";
+            if(shpBuffer != undefined && dbfBuffer != undefined){
+                shp = shpBuffer;
+                dbf = dbfBuffer;
+            }
+            shapefile.open(shp,dbf)
+                .then(source => source.read()
+                    .then(function log(result) {
+                        if (result.done) return;
+                        var feature = {
+                            coordinates: result.value.geometry.coordinates[0],
+                            z: result.value.properties.HEIGHT
+                        }
+                        features.push(feature);
+                        return source.read().then(log);
+
+                    }).then(function () {
+                        senario = {
+                            features: features,
+                            bbox: source.bbox
+                        }
+                        if (xmin == undefined){
+                            xmin = source.bbox[0];
+                            ymin = source.bbox[1];
+                            xmax = source.bbox[2];
+                            ymax = source.bbox[3];
+                        }
+
+                    }).then(function () {
+                        drawSenario(senario,"3d");
+                    }).then(function () {
+                        senario.type = "senario";
+                        var str = JSON.stringify(senario);
+                        sendMessage(str);
+                    }))
+                .catch(error => console.error(error.stack));
+        }
+        // //$('[data-submenu]').submenupicker();
+        // $(function () {
+
+
+        //     // Dropdown fix
+        //     $('.dropdown > a[tabindex]').keydown(function (event) {
+        //         // 13: Return
+
+        //         if (event.keyCode == 13) {
+        //             $(this).dropdown('toggle');
+        //         }
+        //     });
+
+        //     $('.dropdown-submenu > a').submenupicker();
+        // });
+    </script>
+</body>
+
+</html>

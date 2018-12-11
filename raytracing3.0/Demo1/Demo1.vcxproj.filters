@@ -1,0 +1,473 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Distribution Files">
+      <UniqueIdentifier>{B83CAF91-C7BF-462F-B76C-EA11631F866C}</UniqueIdentifier>
+      <Extensions>*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Distribution Files">
+      <UniqueIdentifier>{B83CAF91-C7BF-462F-B76C-EA11631F866C}</UniqueIdentifier>
+      <Extensions>*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\QtWebApp\logging\dualfilelogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controller\dumpcontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\echoserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\logging\filelogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controller\formcontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httpconnectionhandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httpconnectionhandlerpool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httpcookie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httpglobal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httplistener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httprequest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httprequesthandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httpresponse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httpsession.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\httpsessionstore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\logging\logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\logging\logmessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\requestmapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controller\sessioncontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\httpserver\staticfilecontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\templateengine\template.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\templateengine\templatecache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controller\templatecontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QtWebApp\templateengine\templateloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracingCUDA.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controller\fileuploadcontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\QtWebApp\logging\dualfilelogger.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\controller\dumpcontroller.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\echoserver.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\logging\filelogger.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\controller\fileuploadcontroller.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\controller\formcontroller.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\httpserver\httpconnectionhandler.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\httpserver\httpconnectionhandlerpool.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\httpserver\httpcookie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\QtWebApp\httpserver\httpglobal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="..\QtWebApp\httpserver\httplistener.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\httpserver\httprequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="..\QtWebApp\httpserver\httprequesthandler.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\httpserver\httpresponse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\QtWebApp\httpserver\httpsession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="..\QtWebApp\httpserver\httpsessionstore.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\logging\logger.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\logging\logglobal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\QtWebApp\logging\logmessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="src\requestmapper.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\controller\sessioncontroller.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\httpserver\staticfilecontroller.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\templateengine\template.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="..\QtWebApp\templateengine\templatecache.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\controller\templatecontroller.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\templateengine\templateglobal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <QtMoc Include="..\QtWebApp\templateengine\templateloader.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClInclude Include="src\tools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCUDARayTracing.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingCUDA.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticConstants.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="main.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <QtRcc Include="qml.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+    <None Include="main.qml" />
+    <None Include="main.qml" />
+    <None Include="main.qml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="etc\docroot\js\ColladaLoader.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\Detector.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\DeviceOrientationControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\DragControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\EditorControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\Evo.3ds">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\FirstPersonControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\FlyControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\MTLLoader.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\MapControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\OBJLoader.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\OrbitControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\OrbitControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\OrthographicTrackballControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\PointerLockControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\README.md">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\TDSLoader.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\TrackballControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\TrackballControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\controls\TransformControls.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\ammo.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-grid.css.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-grid.css">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-grid.min.css.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-grid.min.css">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-reboot.css.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-reboot.css">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-reboot.min.css.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap-reboot.min.css">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.bundle.js.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.bundle.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.bundle.min.js.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.bundle.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap.css.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap.css">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.js.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap.min.css.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\bootstrap.min.css">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.min.js.map">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\bootstrap.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\dat.gui.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\draco_decoder.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_decoder.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\draco_decoder.wasm">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_decoder.wasm">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_encoder.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\draco_wasm_wrapper.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_wasm_wrapper.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\echarts-gl.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\echarts.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\gunzip.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\index.html">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\inflate.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\jquery.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\jszip.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="main.qml">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\matrix.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\mmdparser.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\o3dgc.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\opentype.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\popper.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\qwebchannel.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\show.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\stats.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\system.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\tether.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\three.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\three.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\three.module.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\timeliner_gui.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\js\libs\tween.min.js">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="etc\docroot\css\webgl.css">
+      <Filter>Distribution Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="MyRayTracingCUDA.cu" />
+  </ItemGroup>
+</Project>

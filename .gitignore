@@ -1,0 +1,16 @@
+/Demo1/
+/raytracing3.0/output/
+/raytracing3.0/output2/
+/raytracing3.0/output3/
+/raytracing3.0/Setup1/
+/raytracing3.0/output.zip
+/raytracing3.0/Demo1/.vs/
+/raytracing3.0/Demo1/etc/docroot/zsl/
+/raytracing3.0/Demo1/etc/docroot/seu/
+/raytracing3.0/Demo1/etc/docroot/nhdx/
+/raytracing3.0/Demo1/etc/docroot/file/
+/raytracing3.0/Demo1/release/
+/raytracing3.0/Demo1/debug/
+/raytracing3.0/Demo1/x64/
+*.shp
+*.dbf

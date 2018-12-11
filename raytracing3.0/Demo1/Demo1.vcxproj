@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{668D2918-8E1D-3B0E-ACE3-9D37D991D940}</ProjectGuid>
+    <RootNamespace>Demo1</RootNamespace>
+    <Keyword>Qt4VSv1.0</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.17134.0</WindowsTargetPlatformMinVersion>
+    <CudaToolkitCustomDir>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0</CudaToolkitCustomDir>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>release\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>release\</IntermediateDirectory>
+    <PrimaryOutput>Demo1</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>debug\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>debug\</IntermediateDirectory>
+    <PrimaryOutput>Demo1</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
+    <QtMsBuild>$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
+    <Import Project="$(QtMsBuild)\qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Demo1</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Demo1</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\QtWebApp\logging;..\QtWebApp\httpserver;..\QtWebApp\templateengine;$(QTDIR)\include;$(QTDIR)\include\QtWebEngine;$(QTDIR)\include\QtWebEngineCore;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWebChannel;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtWebSockets;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtPositioning;$(QTDIR)\include\QtCore;release;\include;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_NO_DEBUG;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_QUICK_LIB;QT_WEBCHANNEL_LIB;QT_QML_LIB;QT_WEBSOCKETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_POSITIONING_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(QTDIR)\lib\qtmain.lib;shell32.lib;$(QTDIR)\lib\Qt5WebEngine.lib;$(QTDIR)\lib\Qt5WebEngineCore.lib;$(QTDIR)\lib\Qt5Quick.lib;$(QTDIR)\lib\Qt5WebChannel.lib;$(QTDIR)\lib\Qt5Qml.lib;$(QTDIR)\lib\Qt5WebSockets.lib;$(QTDIR)\lib\Qt5Network.lib;$(QTDIR)\lib\Qt5Gui.lib;$(QTDIR)\lib\Qt5Positioning.lib;$(QTDIR)\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;C:\openssl\lib;C:\Utils\my_sql\mysql-5.6.11-winx64\lib;C:\Utils\postgresql\pgsql\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkIncremental>false</LinkIncremental>
+      <OutputFile>$(OutDir)\Demo1.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_NO_DEBUG;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_QUICK_LIB;QT_WEBCHANNEL_LIB;QT_QML_LIB;QT_WEBSOCKETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_POSITIONING_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <QtMoc>
+      <QTDIR>$(QTDIR)</QTDIR>
+      <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <Define>UNICODE;_UNICODE;WIN32;WIN64;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_NO_DEBUG;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_QUICK_LIB;QT_WEBCHANNEL_LIB;QT_QML_LIB;QT_WEBSOCKETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_POSITIONING_LIB;QT_CORE_LIB</Define>
+      <CompilerFlavor>msvc</CompilerFlavor>
+      <Include>./$(Configuration)/moc_predefs.h</Include>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+      <InputFile>%(FullPath)</InputFile>
+      <DynamicSource>output</DynamicSource>
+      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(QTDIR)\mkspecs/win32-msvc;.;E:/program/qt/R/raytracing3.0/QtWebApp/logging;E:/program/qt/R/raytracing3.0/QtWebApp/httpserver;E:/program/qt/R/raytracing3.0/QtWebApp/templateengine;$(QTDIR)\include;$(QTDIR)\include/QtWebEngine;$(QTDIR)\include/QtWebEngineCore;$(QTDIR)\include/QtQuick;$(QTDIR)\include/QtWebChannel;$(QTDIR)\include/QtQml;$(QTDIR)\include/QtWebSockets;$(QTDIR)\include/QtNetwork;$(QTDIR)\include/QtGui;$(QTDIR)\include/QtANGLE;$(QTDIR)\include/QtPositioning;$(QTDIR)\include/QtCore;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.15.26726\ATLMFC\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.15.26726\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\cppwinrt</IncludePath>
+    </QtMoc>
+    <QtRcc>
+      <InitFuncName>qml</InitFuncName>
+      <QTDIR>$(QTDIR)</QTDIR>
+      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+      <Compression>default</Compression>
+      <InputFile>%(FullPath)</InputFile>
+    </QtRcc>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\QtWebApp\logging;..\QtWebApp\httpserver;..\QtWebApp\templateengine;$(QTDIR)\include;$(QTDIR)\include\QtWebEngine;$(QTDIR)\include\QtWebEngineCore;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtWebChannel;$(QTDIR)\include\QtQml;$(QTDIR)\include\QtWebSockets;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtPositioning;$(QTDIR)\include\QtCore;debug;\include;$(QTDIR)\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>debug\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;_ENABLE_EXTENDED_ALIGNED_STORAGE;SUPERVERBOSE;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_QUICK_LIB;QT_WEBCHANNEL_LIB;QT_QML_LIB;QT_WEBSOCKETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_POSITIONING_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(QTDIR)\lib\qtmaind.lib;shell32.lib;$(QTDIR)\lib\Qt5WebEngined.lib;$(QTDIR)\lib\Qt5WebEngineCored.lib;$(QTDIR)\lib\Qt5Quickd.lib;$(QTDIR)\lib\Qt5WebChanneld.lib;$(QTDIR)\lib\Qt5Qmld.lib;$(QTDIR)\lib\Qt5WebSocketsd.lib;$(QTDIR)\lib\Qt5Networkd.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Positioningd.lib;$(QTDIR)\lib\Qt5Cored.lib;cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;C:\openssl\lib;C:\Utils\my_sql\mysql-5.6.11-winx64\lib;C:\Utils\postgresql\pgsql\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <OutputFile>$(OutDir)\Demo1.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;WIN64;_ENABLE_EXTENDED_ALIGNED_STORAGE;SUPERVERBOSE;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_QUICK_LIB;QT_WEBCHANNEL_LIB;QT_QML_LIB;QT_WEBSOCKETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_POSITIONING_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <QtMoc>
+      <QTDIR>$(QTDIR)</QTDIR>
+      <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
+      <Define>UNICODE;_UNICODE;WIN32;WIN64;_ENABLE_EXTENDED_ALIGNED_STORAGE;SUPERVERBOSE;QT_WEBENGINE_LIB;QT_WEBENGINECORE_LIB;QT_QUICK_LIB;QT_WEBCHANNEL_LIB;QT_QML_LIB;QT_WEBSOCKETS_LIB;QT_NETWORK_LIB;QT_GUI_LIB;QT_POSITIONING_LIB;QT_CORE_LIB</Define>
+      <CompilerFlavor>msvc</CompilerFlavor>
+      <Include>./$(Configuration)/moc_predefs.h</Include>
+      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
+      <InputFile>%(FullPath)</InputFile>
+      <DynamicSource>output</DynamicSource>
+      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(QTDIR)\mkspecs/win32-msvc;.;E:/program/qt/R/raytracing3.0/QtWebApp/logging;E:/program/qt/R/raytracing3.0/QtWebApp/httpserver;E:/program/qt/R/raytracing3.0/QtWebApp/templateengine;$(QTDIR)\include;$(QTDIR)\include/QtWebEngine;$(QTDIR)\include/QtWebEngineCore;$(QTDIR)\include/QtQuick;$(QTDIR)\include/QtWebChannel;$(QTDIR)\include/QtQml;$(QTDIR)\include/QtWebSockets;$(QTDIR)\include/QtNetwork;$(QTDIR)\include/QtGui;$(QTDIR)\include/QtANGLE;$(QTDIR)\include/QtPositioning;$(QTDIR)\include/QtCore;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.15.26726\ATLMFC\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.15.26726\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\cppwinrt</IncludePath>
+    </QtMoc>
+    <QtRcc>
+      <Compression>default</Compression>
+      <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
+      <QTDIR>$(QTDIR)</QTDIR>
+      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
+      <InitFuncName>qml</InitFuncName>
+      <InputFile>%(FullPath)</InputFile>
+    </QtRcc>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="RayTracingCUDA.cpp" />
+    <ClCompile Include="..\QtWebApp\logging\dualfilelogger.cpp" />
+    <ClCompile Include="src\controller\dumpcontroller.cpp" />
+    <ClCompile Include="src\controller\fileuploadcontroller.cpp" />
+    <ClCompile Include="src\echoserver.cpp" />
+    <ClCompile Include="..\QtWebApp\logging\filelogger.cpp" />
+    <ClCompile Include="src\controller\formcontroller.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httpconnectionhandler.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httpconnectionhandlerpool.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httpcookie.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httpglobal.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httplistener.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httprequest.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httprequesthandler.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httpresponse.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httpsession.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\httpsessionstore.cpp" />
+    <ClCompile Include="..\QtWebApp\logging\logger.cpp" />
+    <ClCompile Include="..\QtWebApp\logging\logmessage.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\requestmapper.cpp" />
+    <ClCompile Include="src\controller\sessioncontroller.cpp" />
+    <ClCompile Include="..\QtWebApp\httpserver\staticfilecontroller.cpp" />
+    <ClCompile Include="..\QtWebApp\templateengine\template.cpp" />
+    <ClCompile Include="..\QtWebApp\templateengine\templatecache.cpp" />
+    <ClCompile Include="src\controller\templatecontroller.cpp" />
+    <ClCompile Include="..\QtWebApp\templateengine\templateloader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyCUDARayTracing.h" />
+    <ClInclude Include="RayTracingCUDA.h" />
+    <ClInclude Include="StaticConstants.h" />
+    <QtMoc Include="..\QtWebApp\logging\dualfilelogger.h">
+    </QtMoc>
+    <QtMoc Include="src\controller\dumpcontroller.h">
+    </QtMoc>
+    <QtMoc Include="src\echoserver.h">
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\logging\filelogger.h">
+    </QtMoc>
+    <QtMoc Include="src\controller\fileuploadcontroller.h">
+    </QtMoc>
+    <QtMoc Include="src\controller\formcontroller.h">
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\httpserver\httpconnectionhandler.h">
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\httpserver\httpconnectionhandlerpool.h">
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\httpserver\httpcookie.h" />
+    <ClInclude Include="..\QtWebApp\httpserver\httpglobal.h" />
+    <QtMoc Include="..\QtWebApp\httpserver\httplistener.h">
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\httpserver\httprequest.h" />
+    <QtMoc Include="..\QtWebApp\httpserver\httprequesthandler.h">
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\httpserver\httpresponse.h" />
+    <ClInclude Include="..\QtWebApp\httpserver\httpsession.h" />
+    <QtMoc Include="..\QtWebApp\httpserver\httpsessionstore.h">
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\logging\logger.h">
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\logging\logglobal.h" />
+    <ClInclude Include="..\QtWebApp\logging\logmessage.h" />
+    <QtMoc Include="src\requestmapper.h">
+    </QtMoc>
+    <QtMoc Include="src\controller\sessioncontroller.h">
+    </QtMoc>
+    <QtMoc Include="..\QtWebApp\httpserver\staticfilecontroller.h">
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\templateengine\template.h" />
+    <QtMoc Include="..\QtWebApp\templateengine\templatecache.h">
+    </QtMoc>
+    <QtMoc Include="src\controller\templatecontroller.h">
+    </QtMoc>
+    <ClInclude Include="..\QtWebApp\templateengine\templateglobal.h" />
+    <QtMoc Include="..\QtWebApp\templateengine\templateloader.h">
+    </QtMoc>
+    <ClInclude Include="src\tools.h" />
+    <ClInclude Include="src\type.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cl -Bx"$(QTDIR)\bin\qmake.exe" -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -Zi -MDd -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E $(QTDIR)\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;debug\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\moc_predefs.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cl -Bx"$(QTDIR)\bin\qmake.exe" -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -O2 -MD -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E $(QTDIR)\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;release\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\moc_predefs.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="main.qml" />
+    <QtRcc Include="qml.qrc">
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="etc\docroot\js\ColladaLoader.js" />
+    <None Include="etc\docroot\js\Detector.js" />
+    <None Include="etc\docroot\js\controls\DeviceOrientationControls.js" />
+    <None Include="etc\docroot\js\controls\DragControls.js" />
+    <None Include="etc\docroot\js\controls\EditorControls.js" />
+    <None Include="etc\docroot\Evo.3ds" />
+    <None Include="etc\docroot\js\controls\FirstPersonControls.js" />
+    <None Include="etc\docroot\js\controls\FlyControls.js" />
+    <None Include="etc\docroot\js\MTLLoader.js" />
+    <None Include="etc\docroot\js\controls\MapControls.js" />
+    <None Include="etc\docroot\js\OBJLoader.js" />
+    <None Include="etc\docroot\js\OrbitControls.js" />
+    <None Include="etc\docroot\js\controls\OrbitControls.js" />
+    <None Include="etc\docroot\js\controls\OrthographicTrackballControls.js" />
+    <None Include="etc\docroot\js\controls\PointerLockControls.js" />
+    <None Include="etc\docroot\js\libs\draco\README.md" />
+    <None Include="etc\docroot\js\TDSLoader.js" />
+    <None Include="etc\docroot\js\TrackballControls.js" />
+    <None Include="etc\docroot\js\controls\TrackballControls.js" />
+    <None Include="etc\docroot\js\controls\TransformControls.js" />
+    <None Include="etc\docroot\js\libs\ammo.js" />
+    <None Include="etc\docroot\css\bootstrap-grid.css.map" />
+    <None Include="etc\docroot\css\bootstrap-grid.css" />
+    <None Include="etc\docroot\css\bootstrap-grid.min.css.map" />
+    <None Include="etc\docroot\css\bootstrap-grid.min.css" />
+    <None Include="etc\docroot\css\bootstrap-reboot.css.map" />
+    <None Include="etc\docroot\css\bootstrap-reboot.css" />
+    <None Include="etc\docroot\css\bootstrap-reboot.min.css.map" />
+    <None Include="etc\docroot\css\bootstrap-reboot.min.css" />
+    <None Include="etc\docroot\js\bootstrap.bundle.js.map" />
+    <None Include="etc\docroot\js\bootstrap.bundle.js" />
+    <None Include="etc\docroot\js\bootstrap.bundle.min.js.map" />
+    <None Include="etc\docroot\js\bootstrap.bundle.min.js" />
+    <None Include="etc\docroot\css\bootstrap.css.map" />
+    <None Include="etc\docroot\css\bootstrap.css" />
+    <None Include="etc\docroot\js\bootstrap.js.map" />
+    <None Include="etc\docroot\js\bootstrap.js" />
+    <None Include="etc\docroot\css\bootstrap.min.css.map" />
+    <None Include="etc\docroot\css\bootstrap.min.css" />
+    <None Include="etc\docroot\js\bootstrap.min.js.map" />
+    <None Include="etc\docroot\js\bootstrap.min.js" />
+    <None Include="etc\docroot\js\libs\dat.gui.min.js" />
+    <None Include="etc\docroot\js\libs\draco\draco_decoder.js" />
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_decoder.js" />
+    <None Include="etc\docroot\js\libs\draco\draco_decoder.wasm" />
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_decoder.wasm" />
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_encoder.js" />
+    <None Include="etc\docroot\js\libs\draco\draco_wasm_wrapper.js" />
+    <None Include="etc\docroot\js\libs\draco\gltf\draco_wasm_wrapper.js" />
+    <None Include="etc\docroot\js\echarts-gl.min.js" />
+    <None Include="etc\docroot\js\echarts.min.js" />
+    <None Include="etc\docroot\js\libs\gunzip.min.js" />
+    <None Include="etc\docroot\index.html" />
+    <None Include="etc\docroot\js\libs\inflate.min.js" />
+    <None Include="etc\docroot\js\jquery.min.js" />
+    <None Include="etc\docroot\js\libs\jszip.min.js" />
+    <None Include="main.qml" />
+    <None Include="etc\docroot\js\matrix.js" />
+    <None Include="etc\docroot\js\libs\mmdparser.min.js" />
+    <None Include="etc\docroot\js\libs\o3dgc.js" />
+    <None Include="etc\docroot\js\libs\opentype.min.js" />
+    <None Include="etc\docroot\js\popper.min.js" />
+    <None Include="etc\docroot\js\qwebchannel.js" />
+    <None Include="etc\docroot\js\show.js" />
+    <None Include="etc\docroot\js\libs\stats.min.js" />
+    <None Include="etc\docroot\js\libs\system.min.js" />
+    <None Include="etc\docroot\js\tether.min.js" />
+    <None Include="etc\docroot\js\three.js" />
+    <None Include="etc\docroot\js\three.min.js" />
+    <None Include="etc\docroot\js\three.module.js" />
+    <None Include="etc\docroot\js\libs\timeliner_gui.min.js" />
+    <None Include="etc\docroot\js\libs\tween.min.js" />
+    <None Include="etc\docroot\css\webgl.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="MyRayTracingCUDA.cu" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.targets" />
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_x64="5.11.1" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
