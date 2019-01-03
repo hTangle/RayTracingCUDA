@@ -11,6 +11,7 @@ struct Point
 struct Points
 {
 	int N;
+	bool isFind;
 	struct Point point[30];
 };
 struct MyVector
@@ -42,5 +43,5 @@ struct Grids
 };
 
 vector<vector<double>> initCUDAInput(Grids *grids, double TX_X, double TX_Y, double RX_X, double RX_Y, int N);
-
+vector<vector<double>> initCUDAInputCPU(Grids *grids, double TX_X, double TX_Y, double RX_X, double RX_Y, int N);
 //vector<vector<double>> initCUDAInput(vector<vector<vector<double>>> grid_input, double TX_X, double TX_Y, double RX_X, double RX_Y, int N);

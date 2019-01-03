@@ -42,6 +42,9 @@ private Q_SLOTS:
     void updateScene(QJsonObject jsonObject);
     void updateVehicle(QJsonObject jsonObject);
     QString VPL();
+	QString generateMap();
+	QString runGenerateMap();
+	QString updateMapData(QJsonObject jsonObject);
 private:
     QWebSocketServer *m_pWebSocketServer;
     QList<QWebSocket *> m_clients;

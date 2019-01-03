@@ -26,8 +26,6 @@
 		指向三四象限 int(x/2)+(int(y/2)-1)*ROW
 	如果在纵向边界处
 		指向二三象限 (int(x/2))-1+int(y/2)*ROW
-
-
 */
 
 
@@ -94,6 +92,14 @@ __device__ void normalizeVector(double &x, double &y) {
 	x = x / norm;
 	y = y / norm;
 }
+//[x1,y1],[x2,y2]构成的直线到[x0,y0]的距离
+__device__ double calculDistancePointAndLine(double x1, double y1, double x2, double y2, double x0, double y0) {
+	double A = y2 - y1;
+	double B = x1 - x2;
+	double C = x2 * y1 - x1 * y2;
+	return abs(A*x0 + B * y0 + C) / sqrt(A*A + B * B);
+}
+
 /*
 vector is input
 points is output
@@ -213,28 +219,26 @@ __global__ void judgeIsTouched(MyVector *vector, Grids *grids, Points *points, P
 				newX = vectorX > 0 ? currentX + LENGTH : currentY;
 				col = vectorX > 0 ? col + 1 : col - 1;
 			}
-			//points[i].point[0].x = newX;
-			//points[i].point[0].y = newY;
-			//grids->grids[0].isContainsgrids[indexC].grids->isContains
-
-			if (grids->grids[indexC].isContains) {
-
+			//vectorX vectorY不可能同时为0
+			//如果格子中包含边或者接收点位于该格子内时，才需要遍历
+			if (grids->grids[indexC].isContains || (oldRow == point->row&&oldCol == point->col)) {
 				//contains edge
 				double distanceM = std::sqrt(2.0)*LENGTH;
 				bool isFind = false;
 				double insertPointOutX = 0, insertPointOutY = 0;
 				int edgeIndex = 0;
+
 				for (int k = 0; k < grids->grids[indexC].N; k++) {
-					//grids->grids[0].edges[k].xstart
 					if (segmentsIntersect(x, y, newX, newY, grids->grids[indexC].edges[k].xstart, grids->grids[indexC].edges[k].ystart, grids->grids[indexC].edges[k].xend, grids->grids[indexC].edges[k].yend) == true) {
-						double insertPointX = 0, insertPointY = 0;
+						double insertPointX = 0, insertPointY = 0;//当前交点
 						calculPointOfIntersection(x, y, newX, newY, grids->grids[indexC].edges[k].xstart, grids->grids[indexC].edges[k].ystart, grids->grids[indexC].edges[k].xend, grids->grids[indexC].edges[k].yend, insertPointX, insertPointY);
-						if (currentX > insertPointX || insertPointOutX > currentX + LENGTH || currentY > insertPointY || insertPointY > currentY + LENGTH) {
+						if (currentX > insertPointX || insertPointX > currentX + LENGTH || currentY > insertPointY || insertPointY > currentY + LENGTH) {
 							//交点必须在这个格子内
 							continue;
 						}
 						double tempDistance = calDistance(x, y, insertPointX, insertPointY);
 						//这么设置的目的是存在反射后，新的起点仍然在这个格子内，而且在一个墙面上，着必然与这个墙面相交的，因此需要过滤掉这个交点
+						//防止交点是自己
 						if (abs(insertPointX - x) < 0.0001 && abs(insertPointY - y) < 0.0001)
 							continue;
 						if (tempDistance < distanceM) {
@@ -246,8 +250,56 @@ __global__ void judgeIsTouched(MyVector *vector, Grids *grids, Points *points, P
 						}
 					}
 				}
+				bool isReached = false;
+				if (oldRow == point->row&&oldCol == point->col) {
+					//当目标点在这个格子中时，需要判断是否与目标点相交
+					if (x != newX && y != newY) {
+						double targetDistance = calculDistancePointAndLine(x, y, newX, newY, point->x, point->y);
+						//只有在捕获圆半径内且距离出发点最近，才有交点
+						if (targetDistance < CAPTURE_RADIUS) {
+							double targetPointDistance = calDistance(x, y, point->x, point->y);
+							if (targetPointDistance < distanceM) {
+								distanceM = targetPointDistance;
+								insertPointOutX = point->x;
+								insertPointOutY = point->y;
+								isReached = true;
+								isFind = true;
+							}
+						}
+					}
+				}
+
+				if (isFind&&isReached) {
+					//与目标点相交，存在射线
+					points[i].point[points[i].N].x = insertPointOutX;
+					points[i].point[points[i].N].y = insertPointOutY;
+					points[i].N++;
+					points[i].isFind = true;
+					break;
+				}
 				//已经遍历完成了，如果有交点，则需要更改射线传输的方向
-				if (isFind) {
+				else if (isFind) {
+					//当前射线的向量
+					//if (debugFlag) {
+					//	double currentVectorX = x - insertPointOutX;
+					//	double currentVectorY = y - insertPointOutY;
+					//	normalizeVector(currentVectorX, currentVectorY);
+					//	vectorX = currentVectorX;
+					//	vectorY = currentVectorY;
+					//	points[i].point[points[i].N].x = insertPointOutX;
+					//	points[i].point[points[i].N].y = insertPointOutY;
+					//	points[i].N++;
+					//	x = insertPointOutX;
+					//	y = insertPointOutY;
+					//	row = oldRow;
+					//	col = oldCol;
+					//	if (points[i].N > MAX_REFLECTION_TIMES) {
+					//		//超出了最大次数,没找到交点，因此点数为0
+					//		//points[i].N = 0;
+					//		break;
+					//	}
+					//}
+					//else {
 					double currentVectorX = x - insertPointOutX;
 					double currentVectorY = y - insertPointOutY;
 					//要求反射向量
@@ -258,31 +310,43 @@ __global__ void judgeIsTouched(MyVector *vector, Grids *grids, Points *points, P
 					//------------------
 					//先求墙面的法向量
 					//grids->grids[indexC].edges[k]
+					//之前求的墙面的法向量是顺时针方向的，也就是朝内，但是我们默认射线只从外部射过来
+					//因此法向量均取反
 					double edgeVectorX = -grids->grids[indexC].edges[edgeIndex].vectorX;
 					double edgeVectorY = -grids->grids[indexC].edges[edgeIndex].vectorY;
+
 					if (edgeVectorX*currentVectorX + edgeVectorY * currentVectorY < 0) {
+						//夹角如果大于90度则需要转换
 						edgeVectorX = -edgeVectorX;
 						edgeVectorY = -edgeVectorY;
 					}
+					//注意，墙面的法向量为单位向量
+					//反射向量在法向量上的投影为(uv)v 
+					//反射向量为2(uv)v-u
+					//参考https://www.cnblogs.com/graphics/archive/2013/02/21/2920627.html
+
 					double temp = currentVectorX * edgeVectorX + currentVectorY * edgeVectorY;//uv
 					double edgeProjectVectorX = temp * edgeVectorX;
 					double edgeProjectVectorY = temp * edgeVectorY;
 					//遍历完毕，更新数据，将交点写入输出Points
 					vectorX = 2 * edgeProjectVectorX - currentVectorX;
 					vectorY = 2 * edgeProjectVectorY - currentVectorY;
-					normalizeVector(vectorX, vectorY);
-					x = insertPointOutX;
+					normalizeVector(vectorX, vectorY);//完事以后需要归一化
+					x = insertPointOutX;//更新反射起点
 					y = insertPointOutY;
 					points[i].point[points[i].N].x = x;
 					points[i].point[points[i].N].y = y;
 					points[i].N++;
 					row = oldRow;
 					col = oldCol;
-					//printf("%d\n", points[i].N);
-					if (points[i].N > 19)
+					if (points[i].N > MAX_REFLECTION_TIMES) {
+						//超出了最大次数,没找到交点，因此点数为0
+						points[i].N = 0;
+						points[i].isFind = false;
 						break;
-					if (points[i].N > MAX_REFLECTION_TIMES)
-						break;
+					}
+					//}
+
 				}
 			}
 			else {
@@ -340,9 +404,10 @@ vector<vector<double>> initCUDAInput(Grids *grids, double TX_X, double TX_Y, dou
 		double angle = 2 * PIs / N * i;
 		myVector[i].vectorX = cos(angle);
 		myVector[i].vectorY = sin(angle);
-		myVector[i].col = 0;
-		myVector[i].row = 1;
+		myVector[i].col = int(TX_X / 2);
+		myVector[i].row = int(TX_Y / 2);
 		points[i].N = 0;
+		points[i].isFind = false;
 	}
 	MyVector *cuda_myVector;
 	Points *cuda_points;
@@ -354,7 +419,7 @@ vector<vector<double>> initCUDAInput(Grids *grids, double TX_X, double TX_Y, dou
 
 	cudaMemcpy(cuda_grids, grids, sizeof(struct Grids), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_myVector, myVector, sizeof(struct MyVector) * N, cudaMemcpyHostToDevice);
-	//cudaMemcpy(cuda_points, points, sizeof(struct Points) * 60, cudaMemcpyHostToDevice);
+	cudaMemcpy(cuda_points, points, sizeof(struct Points) * 60, cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_Rx, Rx, sizeof(struct Point), cudaMemcpyHostToDevice);
 	int threadsPerBlock = 256;
 	int blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;
@@ -362,8 +427,9 @@ vector<vector<double>> initCUDAInput(Grids *grids, double TX_X, double TX_Y, dou
 	cudaMemcpy(points, cuda_points, sizeof(struct Points) * N, cudaMemcpyDeviceToHost);
 
 	vector<vector<double>> getResult;
+	int pointsCount = 0;
 	for (int i = 0; i < N; i++) {
-		if (points[i].N != 0) {
+		if (points[i].isFind) {
 			vector<double> results;
 			for (int j = 0; j < points[i].N; j++) {
 				results.push_back(points[i].point[j].x);
@@ -371,6 +437,9 @@ vector<vector<double>> initCUDAInput(Grids *grids, double TX_X, double TX_Y, dou
 				//printf("%d-%d-%d:%f,%f\n", i, j, 2 * i, points[i].point[j].x, points[i].point[j].y);
 			}
 			getResult.push_back(results);
+		}
+		else {
+			pointsCount++;
 		}
 	}
 	finish = clock();

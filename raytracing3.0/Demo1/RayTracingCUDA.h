@@ -14,23 +14,30 @@ using namespace std;
 class MyEdge {
 public:
 	double x1, y1, x2, y2, vx, vy;
+	MyEdge() {
+		x1 = 0, y1 = 0, x2 = 0, y2 = 0, vx = 0, vy = 0;
+	}
 };
 class MyGrid {
 public:
 	int N = 0;
 	MyEdge *myedge = new MyEdge[MAX_EDGE_GRID];
-	void insert(double x1, double y1, double x2, double y2, double vx, double vy) {
-		if (N == 60) {
-			qDebug() << "exceed 60";
-			return;
+	bool insert(double x1, double y1, double x2, double y2, double vx, double vy) {
+		if (N >= MAX_EDGE_GRID - 1) {
+			qDebug() << "exceed"<< MAX_EDGE_GRID;
+			return false;
 		}
-		myedge[N].x1 = x1;
-		myedge[N].y1 = y1;
-		myedge[N].x2 = x2;
-		myedge[N].y2 = y2;
-		myedge[N].vx = vx;
-		myedge[N].vy = vy;
-		N++;
+		else {
+			myedge[N].x1 = x1;
+			myedge[N].y1 = y1;
+			myedge[N].x2 = x2;
+			myedge[N].y2 = y2;
+			myedge[N].vx = vx;
+			myedge[N].vy = vy;
+			N++;
+			return true;
+		}
+
 	}
 	void clear() {
 		N = 0;
@@ -48,7 +55,7 @@ public:
 	//vector<vector<vector<double>>> grid_input;
 	//MyClass *myClass = new MyClass[ROW*COL];
 	//vector<vector<double>> grids[ROW*COL];
-	double Tx_x, Tx_y, Rx_x, Rx_y;
+	double Tx_x = -100, Tx_y = -100, Rx_x = -100, Rx_y = -100;
 	int RayNumbers;
 public:
 	RayTracingCUDA();
@@ -59,13 +66,53 @@ public:
 			mygrid[i].clear();
 		}
 	}
+	QString runInputDataCUDA(struct Grids *grids) {
+		qDebug() << "begin CUDA";
+
+		vector<vector<double>> getResult = initCUDAInput(grids, 0.25 + 50, 0.25 + 50, 0.25 + 50, 0.25 + 30, 180);
+		qDebug() << "calculation finished";
+		//ofstream out("line.txt");
+		QJsonObject json;
+		json.insert("type", QString("output"));
+		QJsonArray paths;
+		QJsonObject pointTemp;
+		pointTemp.insert("x", Tx_x - 50);
+		pointTemp.insert("y", (Tx_y - 50));
+		pointTemp.insert("z", 0);
+		qDebug() << "getResult.size()" << getResult.size();
+		for (int i = 0; i < getResult.size(); i++) {
+			QJsonObject path;
+			path.insert("pathloss", -117.8);
+			QJsonArray nodeList;
+			nodeList.push_back(pointTemp);
+			for (int j = 0; j < getResult[i].size(); j += 2) {
+				QJsonObject point;
+				point.insert("x", (getResult[i][j] - 50));
+				point.insert("y", (getResult[i][j + 1] - 50));
+				point.insert("z", 0);
+				//qDebug() << (getResult[i][j] - 50)<< "," << (getResult[i][j + 1] - 50);
+				nodeList.push_back(point);
+			}
+			path.insert("nodeList", nodeList);
+			paths.push_back(path);
+		}
+		json.insert("paths", paths);
+		json.insert("state", QString("1"));
+		QJsonDocument doc(json);
+		QString strJson(doc.toJson(QJsonDocument::Compact));
+		qDebug() << "Send Message";
+		return strJson;
+	}
 	QString beginCUDA() {
+		qDebug() << "begin CUDA";
 		struct Grids *grids = (struct Grids *)malloc(sizeof(struct Grids));
 		grids->width = LENGTH;
 		grids->height = LENGTH;
+		int edgeCount = 0;
 		for (int i = 0; i < ROW*COL; i++) {
 			if (mygrid[i].N != 0) {
 				grids->grids[i].N = mygrid[i].N;
+				edgeCount += mygrid[i].N;
 				grids->grids[i].isContains = true;
 				for (int j = 0; j < mygrid[i].N; j++) {
 					grids->grids[i].edges[j].xstart = mygrid[i].myedge[j].x1;
@@ -81,16 +128,19 @@ public:
 				grids->grids[i].isContains = false;
 			}
 		}
-		vector<vector<double>> getResult = initCUDAInput(grids, Tx_x, Tx_y, Rx_x, Rx_y, 360);
+		qDebug() << "data inited succeed, there has " << edgeCount << "edges";
+
+		vector<vector<double>> getResult = initCUDAInput(grids, Tx_x, Tx_y, Rx_x, Rx_y, 1080);
+		qDebug() << "calculation finished";
 		//ofstream out("line.txt");
 		QJsonObject json;
 		json.insert("type", QString("output"));
 		QJsonArray paths;
 		QJsonObject pointTemp;
-		pointTemp.insert("x", Tx_x);
-		pointTemp.insert("y", Tx_y);
+		pointTemp.insert("x", Tx_x - 50);
+		pointTemp.insert("y", (Tx_y - 50));
 		pointTemp.insert("z", 0);
-
+		qDebug() << "getResult.size()" << getResult.size();
 		for (int i = 0; i < getResult.size(); i++) {
 			QJsonObject path;
 			path.insert("pathloss", -117.8);
@@ -98,18 +148,20 @@ public:
 			nodeList.push_back(pointTemp);
 			for (int j = 0; j < getResult[i].size(); j += 2) {
 				QJsonObject point;
-				point.insert("x", getResult[i][j]);
-				point.insert("y", getResult[i][j + 1]);
+				point.insert("x", (getResult[i][j] - 50));
+				point.insert("y", (getResult[i][j + 1] - 50));
 				point.insert("z", 0);
-				qDebug() << getResult[i][j] << "," << getResult[i][j + 1];
+				//qDebug() << (getResult[i][j] - 50)<< "," << (getResult[i][j + 1] - 50);
 				nodeList.push_back(point);
 			}
 			path.insert("nodeList", nodeList);
 			paths.push_back(path);
 		}
 		json.insert("paths", paths);
+		json.insert("state", QString("1"));
 		QJsonDocument doc(json);
 		QString strJson(doc.toJson(QJsonDocument::Compact));
+		qDebug() << "Send Message";
 		return strJson;
 
 		//QJsonObject json;
@@ -157,9 +209,31 @@ public:
 		}
 		out.close();
 	}
+	QString getMapDataJSON() {
+		QJsonObject json;
+		json.insert("type", QString("mapDataGet"));
+		QJsonArray paths;
+		for (int i = 0; i < ROW*COL; i++) {
+			if (mygrid[i].N > 1) {
+				for (int j = 0; j < mygrid[i].N; j++) {
+					QJsonArray nodeList;
+					nodeList.push_back(mygrid[i].myedge[j].x1 - 50);
+					nodeList.push_back(mygrid[i].myedge[j].y1 - 50);
+					nodeList.push_back(mygrid[i].myedge[j].x2 - 50);
+					nodeList.push_back(mygrid[i].myedge[j].y2 - 50);
+					paths.push_back(nodeList);
+				}
+			}
+		}
+		json.insert("data", paths);
+		QJsonDocument doc(json);
+		QString strJson(doc.toJson(QJsonDocument::Compact));
+		qDebug() << "Send Message";
+		return strJson;
+	}
 	//归一化向量
 	void normalizationVector(double &x, double &y) {
-		double z = sqrt(x*x + y * y);
+		double z = sqrt(x * x + y * y);
 		x = x / z;
 		y = y / z;
 	}
@@ -186,13 +260,13 @@ public:
 	//需要将这个墙面加入到坐标系统
 	//我们的grid系统是50*50的网格，每个网格的边长为2
 	//将问题抽象为 从起点x1,y1出发，到x2,y2为止，每次碰到的墙面
-	void addEdgeToGrids(double x1, double y1, double x2, double y2) {
+	bool addEdgeToGrids(double x1, double y1, double x2, double y2) {
 		double vectorX, vectorY, normalVectorX, normalVectorY;//法向量
-		normalVectorX = y2 - y1;
-		normalVectorY = x1 - x2;
+		//这地方直接求法向量，而且法向量位于直线的顺时针方向
+		normalVectorX = y2 - y1;//y
+		normalVectorY = x1 - x2;//-x
 		vectorX = x2 - x1;
 		vectorY = y2 - y1;
-
 		normalizationVector(vectorX, vectorY);//归一化
 		normalizationVector(normalVectorX, normalVectorY);
 		int row = int(y1 / LENGTH);
@@ -203,13 +277,39 @@ public:
 		int minCol = col < targetCol ? col : targetCol;
 		targetRow = row < targetRow ? targetRow : row;
 		targetCol = col < targetCol ? targetCol : col;
+		minRow = minRow >= ROW ? ROW - 1 : minRow;
+		minCol = minCol >= COL ? COL - 1 : minCol;
+		targetRow = targetRow >= ROW ? ROW - 1 : targetRow;
+		targetCol = targetCol >= COL ? COL - 1 : targetCol;
+		qDebug() << "[" << x1 << "," << y1 << "],[" << x2 << "," << y2 << "]";
+		qDebug() << "[" << minRow << "," << targetRow << "],[" << minCol << "," << targetCol << "]";
+		//[66.2588, 98.8762], [66.6485, 100]
+		//if()
+		bool flag = true;
 		for (int i = minRow; i <= targetRow; i++) {
 			for (int j = minCol; j <= targetCol; j++) {
-				int currentIndex = row * COL + col;
-				mygrid[currentIndex].insert(x1, y1, x2, y2, normalVectorX, normalVectorY);
+				int currentIndex = i * COL + j;
+				flag = mygrid[currentIndex].insert(x1, y1, x2, y2, normalVectorX, normalVectorY);
 			}
 		}
-
+		return flag;
+		//[53.95, 68.1127], [56.3247, 68.1282]
+		//	[34, 34], [26, 28]
+		//	56.3247, 68.1282
+		//	[56.3247, 68.1282], [56.2781, 65.1017]
+		//	[32, 34], [28, 28]
+		//	100, 50.5743
+		//	[100, 50.5743], [98.9601, 45.5456]
+		//	[22, 25], [49, 49]
+		//	98.9601, 45.5456
+		//	[98.9601, 45.5456], [97.1442, 45.8404]
+		//	[22, 22], [48, 49]
+		//	97.1442, 45.8404
+		//	[97.1442, 45.8404], [98.1686, 50.8847]
+		//	[22, 25], [48, 49]
+		//	98.1686, 50.8847
+		//	[98.1686, 50.8847], [100, 50.5743]
+		//	[25, 25], [49, 49]
 		//do {
 			//if (row < 0 || row >= ROW || col < 0 || COL <= col)
 			//	return;

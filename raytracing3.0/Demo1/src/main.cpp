@@ -86,6 +86,8 @@ QString searchConfigFile()
 */
 int main(int argc, char *argv[])
 {
+	//QCoreApplication::addLibraryPath("F:\\Qt\\5.11.2\\msvc2017_64\\plugins\\platforms");
+
 	/*vector<vector<vector<double>>> grid_input;
 
 	vector<vector<double>> grid0;

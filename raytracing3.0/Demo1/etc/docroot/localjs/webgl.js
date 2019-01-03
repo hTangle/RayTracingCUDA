@@ -13,14 +13,14 @@ var triangle = [];
 var distanceText = [];
 var cubeMesh;
 var objects = []; //存放平面，用于投影检测
-var builidings  = [];  //存放建筑物
+var builidings = [];  //存放建筑物
 var tx = [], rx = [];
 var vehicles = [];
 var pathLines = [];
 var roadLines = [];
 var roadNames = [];
 var rollOverLines = [];
-var xmax , xmin , ymax , ymin ;
+var xmax, xmin, ymax, ymin;
 //被除数
 var dividend;
 
@@ -34,17 +34,18 @@ var RxDTO;
 var lut;
 
 var layers = {
-    plane : true,
+    plane: true,
     building: true,
-    road : true,
-    vehicles : true,
-    ray : true,
+    road: true,
+    vehicles: true,
+    ray: true,
 };
 
 
 main();
 render();
 loadPathLoss([1, 2, 3, 4, 5, 6], [-100, -101, -102, -103, -99, -98]);
+
 
 
 function processVehicleForm() {
@@ -55,24 +56,24 @@ function processVehicleForm() {
     var dynamic = document.getElementById("dynamic");
     var isDynamic = dynamic.checked;
     var type;
-    if (type1.checked == true){
+    if (type1.checked == true) {
         type = "tx";
-    } else if (type2.checked == true){
+    } else if (type2.checked == true) {
         type = "other";
-    } else if(type3.checked == true){
+    } else if (type3.checked == true) {
         type = "rx";
     }
     console.log(speed);
     console.log(type);
     console.log(isDynamic);
-    setVehicle(speed,type,isDynamic);
+    setVehicle(speed, type, isDynamic);
 }
 
 
 
 
 
-function setVehicle(speed,type,dynamic){
+function setVehicle(speed, type, dynamic) {
 
     vehicleDTO.type = "vehicle";
     vehicleDTO.vehicleType = type;
@@ -82,18 +83,18 @@ function setVehicle(speed,type,dynamic){
     rollOverMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, opacity: 0.5, transparent: true });
     rollOverMesh = new THREE.Mesh(rollOverGeo, rollOverMaterial);
     var geometry = new THREE.LineGeometry();
-    geometry.setPositions( [0,0,0,0,0,0] );
+    geometry.setPositions([0, 0, 0, 0, 0, 0]);
     // geometry.setColors( colors );
-    var matLine = new THREE.LineMaterial( {
+    var matLine = new THREE.LineMaterial({
         color: "#222221",
         linewidth: 0.002,
         // vertexColors: THREE.VertexColors,
         dashed: true
-    } );
-    rollOverLine = new THREE.Line2( geometry, matLine );
+    });
+    rollOverLine = new THREE.Line2(geometry, matLine);
     rollOverLine.computeLineDistances();
-    rollOverLine.scale.set( 1, 1, 1 );
-    scene.add( rollOverLine );
+    rollOverLine.scale.set(1, 1, 1);
+    scene.add(rollOverLine);
     rollOverLine.name = Math.random().toString(36).substr(2);
     rollOverLines.push(rollOverLine);
 
@@ -136,12 +137,12 @@ function stopListen() {
 
 function drawTriangle(intersect) {
     var triangleShape = new THREE.Shape();
-    triangleShape.moveTo( 0, 0 );
-    triangleShape.lineTo( 0.5, 1 );
-    triangleShape.lineTo( 1, 0.5);
-    triangleShape.lineTo( 0, 0 ); // close path
-    var geometry = new THREE.ShapeBufferGeometry( triangleShape );
-    var mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial( {side: THREE.DoubleSide, color : "#000000"} ) );
+    triangleShape.moveTo(0, 0);
+    triangleShape.lineTo(0.5, 1);
+    triangleShape.lineTo(1, 0.5);
+    triangleShape.lineTo(0, 0); // close path
+    var geometry = new THREE.ShapeBufferGeometry(triangleShape);
+    var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: "#000000" }));
 
     console.log(intersect.point.x);
     console.log(startPoint.y);
@@ -149,32 +150,33 @@ function drawTriangle(intersect) {
     console.log(startPoint.x);
     var angle = Math.atan((intersect.point.x - startPoint.y)
         / (intersect.point.z - startPoint.x));
-    if(intersect.point.z - startPoint.x < 0){
+    if (intersect.point.z - startPoint.x < 0) {
         angle += Math.PI;
     }
     console.log(angle);
     mesh.position.copy(intersect.point);
     mesh.position.y = 0.1;
-    mesh.rotation.set( Math.PI / 2, 0, Math.PI * 5 / 4 );
+    mesh.rotation.set(Math.PI / 2, 0, Math.PI * 5 / 4);
     mesh.rotateZ(2 * Math.PI - angle);
-    mesh.scale.set( 2, 2, 2 );
+    mesh.scale.set(2, 2, 2);
     mesh.name = Math.random().toString(36).substr(2);
     scene.add(mesh);
     triangle.push(mesh);
 }
 
+//将其变换到[-40,40]
 function coordinateTransX(x) {
-    return (x - (xmax + xmin)/ 2)/(dividend) * 80
+    return (x - (xmax + xmin) / 2) / (dividend) * 100
 }
 function coordinateTransY(y) {
-    return (y - (ymax + ymin)/ 2)/(dividend) * 80
+    return (y - (ymax + ymin) / 2) / (dividend) * 100
 }
 
 function xToCoordinate(x) {
-    return  x/80*(dividend) + (xmax + xmin) / 2;
+    return x / 100 * (dividend) + (xmax + xmin) / 2;
 }
 function yToCoordinate(y) {
-    return  y/80*(dividend) + (ymax + ymin)  / 2;
+    return y / 100 * (dividend) + (ymax + ymin) / 2;
 }
 function onDocumentMouseMove(event) {
     event.preventDefault();
@@ -195,15 +197,15 @@ function onDocumentMouseMove(event) {
     var y = intersect.point.x;
     var longitude = xToCoordinate(x);
     var latitude = yToCoordinate(y);
-    cxt.fillText(longitude, 10, 18);
-    cxt.fillText(latitude, 10, 33);
+    cxt.fillText(x, 10, 18);
+    cxt.fillText(y, 10, 33);
 
-    if(startPoint != undefined){
+    if (startPoint != undefined) {
 
         console.log(distance);
         var positions = [];
-        positions.push(y,0.1,x);
-        positions.push(startPoint.y,0.1,startPoint.x);
+        positions.push(y, 0.1, x);
+        positions.push(startPoint.y, 0.1, startPoint.x);
         rollOverLine.geometry.setPositions(positions);
     }
     //render();
@@ -212,7 +214,7 @@ function onDocumentMouseMove(event) {
 function onDocumentMouseDown(event) {
     event.preventDefault();
     console.log(event.button);
-    if (event.button == 2){
+    if (event.button == 2) {
         scene.remove(rollOverMesh);
         stopListen();
         return;
@@ -222,40 +224,42 @@ function onDocumentMouseDown(event) {
     var intersects = raycaster.intersectObjects(objects);
     if (intersects.length > 0) {
         var intersect = intersects[0];
-        count  += 1;
+        count += 1;
         scene.remove(rollOverMesh);
         var x = intersect.point.z;
-        var y =  intersect.point.x;
+        var y = intersect.point.x;
+        console.log("TX location", x, y);
         var longitude = xToCoordinate(x);
-        var latitude  = yToCoordinate(y);
+        var latitude = yToCoordinate(y);
 
-        if (dynamicMod == undefined || dynamicMod == false){
-            if (vehicleType == "other"){
-                loadFbx(intersect,vehicleType)
+        if (dynamicMod == undefined || dynamicMod == false) {
+            if (vehicleType == "other") {
+                loadFbx(intersect, vehicleType)
             } else {
                 load3DS(intersect, vehicleType);
             }
-            vehicleDTO.location1 = [longitude, latitude];
+            vehicleDTO.location1 = [x, y];//
             console.log(vehicleDTO);
-            var str = JSON.stringify(vehicleDTO);
-            sendMessage(str);
+            sendJSONDataToBack("vehicle", vehicleDTO);
+            //var str = JSON.stringify(vehicleDTO);
+            //sendMessage(str);
             stopListen();
 
-        }else {
-            if (count == 1){
-                if (vehicleType == "other"){
-                    loadFbx(intersect,vehicleType)
+        } else {
+            if (count == 1) {
+                if (vehicleType == "other") {
+                    loadFbx(intersect, vehicleType)
                 } else {
                     load3DS(intersect, vehicleType);
                 }
-                startPoint = {x : x, y : y, longitude : longitude, latitude : latitude};
+                startPoint = { x: x, y: y, longitude: longitude, latitude: latitude };
                 vehicleDTO.location1 = [longitude, latitude];
-            }else {
+            } else {
                 distance = GetDistance(longitude, latitude, startPoint.longitude, startPoint.latitude);
                 console.log(distance);
-                drawText(ENfont,distance + "m",(x + startPoint.x) / 2,(y + startPoint.y) / 2, 2);
+                drawText(ENfont, distance + "m", (x + startPoint.x) / 2, (y + startPoint.y) / 2, 2);
                 drawTriangle(intersect);
-                vehicleDTO.location2 = [longitude,latitude];
+                vehicleDTO.location2 = [longitude, latitude];
                 vehicleDTO.distance = distance;
                 console.log(vehicleDTO);
                 var str = JSON.stringify(vehicleDTO);
@@ -268,22 +272,22 @@ function onDocumentMouseDown(event) {
 
 }
 
-function GetDistance2(x1,y1,x2,y2) {
+function GetDistance2(x1, y1, x2, y2) {
     var lng1 = xToCoordinate(x1);
     var lat1 = yToCoordinate(y1);
     var lng2 = xToCoordinate(x2);
     var lat2 = yToCoordinate(y2);
-    return GetDistance(lng1,lat1,lng2,lat2);
+    return GetDistance(lng1, lat1, lng2, lat2);
 }
 
-function GetDistance( lng1,lat1, lng2, lat2) {
+function GetDistance(lng1, lat1, lng2, lat2) {
     var radLat1 = rad(lat1);
     var radLat2 = rad(lat2);
     var a = radLat1 - radLat2;
     var b = rad(lng1) - rad(lng2);
-    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
-        Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
-    s = s *6378.137 ;// EARTH_RADIUS;
+    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+        Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+    s = s * 6378.137;// EARTH_RADIUS;
     s = Math.round(s * 10000) / 10000;
     return s * 1000;
 }
@@ -294,36 +298,42 @@ function rad(x) {
 }
 
 
-function drawSenario(senario,mod) {
-
-    var pointX = [];
-    var pointY = [];
+function drawSenario(senario, mod) {
+    var pointXY = [];
     var pointZ = [];
-    for (var i = 0; i < senario.features.length; i++){
-        var pointXX = [];
-        var pointYY = [];
+    for (var i = 0; i < senario.features.length; i++) {
+        var pointXXYY = [];
         var coords = senario.features[i].coordinates;
-        for (var j = 0; j < coords.length; j ++) {
+        for (var j = 0; j < coords.length; j++) {
             var x = coords[j][0];
             var y = coords[j][1];
-            pointXX.push(  coordinateTransX(x) );
-            pointYY.push(  coordinateTransY(y) );
+            pointXXYY.push([coordinateTransX(x), coordinateTransY(y)]);
         }
-        pointX.push(pointXX);
-        pointY.push(pointYY);
-        pointZ.push(  (senario.features[i].z) / 80 *  (118.813658- 118.728997)/( dividend));
+        pointXY.push(pointXXYY);
+        pointZ.push((senario.features[i].z) / 80 * (118.813658 - 118.728997) / (dividend));
 
     }
     layers.building = true;
-    camera.layers.enable( 1 );
+    camera.layers.enable(1);
     builidings = [];
-    for (var i = 0; i < pointX.length; i++) {
-        addMulGeometry(pointX[i], pointY[i], pointZ[i],mod);
+    for (var i = 0; i < pointXY.length; i++) {
+        addMulGeometryNew(pointXY[i], pointZ[i], mod);
+        console.log(pointXY[i]);
     }
-
-    gui.add( layers, 'building' ).onChange( function () {
-        camera.layers.toggle( 1 );
-    } );
+    //console.log(pointXY);//[[]]
+    gui.add(layers, 'building').onChange(function () {
+        camera.layers.toggle(1);
+    });
+    //这儿把数据发送过去，只需要发送
+    //point=[[x1,x2,x3,x4],[x1,x2,x3],[]];
+    //pointY=[[y1,y2,y3,y4],[y1,y2,y3],[]];
+    var mapData = {
+        type: "mapData",
+        data: pointXY 
+    };
+    var str = JSON.stringify(mapData);
+    sendMessage(str);
+    console.log(mapData);
 }
 function setTx(type) {
     orbitControls.enabled = false;
@@ -341,7 +351,7 @@ function setTx(type) {
     document.addEventListener('mousemove', onDocumentMouseMove, false);
     document.addEventListener('mousedown', onDocumentMouseDown, false);
 }
-function hide( objs) {
+function hide(objs) {
     for (let i = 0; i < objs.length; i++) {
         scene.remove(scene.getObjectByName(objs[i].name));
     }
@@ -352,7 +362,7 @@ function remove(objs) {
     objs = [];
 }
 function resume(objs) {
-    if (objs.size == 0){
+    if (objs.size == 0) {
         return;
     }
     for (let i = 0; i < objs.length; i++) {
@@ -378,14 +388,14 @@ function onWindowResize() {
 }
 
 
-function drawRoad(roads){
+function drawRoad(roads) {
     var roadName = "init";
     roadLines = [];
-    for (let i = 0; i < roads.length; i++){
+    for (let i = 0; i < roads.length; i++) {
         var geometry = new THREE.Geometry();
-        var material = new THREE.LineBasicMaterial( { vertexColors: true } );
-        var color1 = new THREE.Color( "#FFFFFF" );
-        var color2 = new THREE.Color( "#FFFFFF");
+        var material = new THREE.LineBasicMaterial({ vertexColors: true });
+        var color1 = new THREE.Color("#FFFFFF");
+        var color2 = new THREE.Color("#FFFFFF");
         var coordinates = roads[i].coordinates;
         var name = roads[i].name;
         var direction = roads[i].direction;
@@ -398,8 +408,8 @@ function drawRoad(roads){
         y = coordinateTransY(y);
         // console.log(x);
         // console.log(y);
-        for(let j = 0; j < coordinates.length - 1; j++){
-            var p1 = coordinates[j], p2 = coordinates[j+1];
+        for (let j = 0; j < coordinates.length - 1; j++) {
+            var p1 = coordinates[j], p2 = coordinates[j + 1];
             var x1 = coordinateTransX(p1[0]);
             var y1 = coordinateTransY(p1[1]);
             var x2 = coordinateTransX(p2[0]);
@@ -408,43 +418,43 @@ function drawRoad(roads){
             var q2 = new THREE.Vector3(y2, 0.1, x2);
             geometry.vertices.push(q1);
             geometry.vertices.push(q2);
-            geometry.colors.push( color1, color2 );
-            var line = new THREE.Line( geometry, material, THREE.LineSegments );
-            line.layers.set( 2 );
+            geometry.colors.push(color1, color2);
+            var line = new THREE.Line(geometry, material, THREE.LineSegments);
+            line.layers.set(2);
             line.name = Math.random().toString(36).substr(2);
             scene.add(line);
             roadLines.push(line);
         }
-        if(name != roadName){
+        if (name != roadName) {
             // drawText(CNfont,name,x,y,direction);
             // roadName = name;
         }
     }
-    camera.layers.enable( 2 );
-    gui.add( layers, 'road' ).onChange( function () {
-        camera.layers.toggle( 2 );
-    } );
+    camera.layers.enable(2);
+    gui.add(layers, 'road').onChange(function () {
+        camera.layers.toggle(2);
+    });
 
 }
 
-function drawText( font , text, x, y , direction) {
+function drawText(font, text, x, y, direction) {
 
     // Get text from hash
 
     var theText = text;
 
-    if (text == undefined){
+    if (text == undefined) {
         return
     }
-    var hash = document.location.hash.substr( 1 );
+    var hash = document.location.hash.substr(1);
 
-    if ( hash.length !== 0 ) {
+    if (hash.length !== 0) {
 
         theText = hash;
 
     }
 
-    var geometry = new THREE.TextGeometry( theText, {
+    var geometry = new THREE.TextGeometry(theText, {
         font: font,
         size: 0.5,
         height: 0,
@@ -454,34 +464,34 @@ function drawText( font , text, x, y , direction) {
     geometry.computeBoundingBox();
 
     var materials = [
-        new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: 0.5 } ),
-        new THREE.MeshBasicMaterial( { color: 0x000000, overdraw: 0.5 } )
+        new THREE.MeshBasicMaterial({ color: 0x000000, overdraw: 0.5 }),
+        new THREE.MeshBasicMaterial({ color: 0x000000, overdraw: 0.5 })
     ];
 
-    var mesh = new THREE.Mesh( geometry, materials );
+    var mesh = new THREE.Mesh(geometry, materials);
 
     mesh.position.x = y;
     mesh.position.y = 0.1;
     mesh.position.z = x;
 
     mesh.rotation.x = Math.PI / 2;
-    mesh.rotation.y = Math.PI ;
+    mesh.rotation.y = Math.PI;
 
-    if (direction == "2"){
-        mesh.rotation.z = Math.PI/2 ;
+    if (direction == "2") {
+        mesh.rotation.z = Math.PI / 2;
     }
     mesh.layers.set(2);
     camera.layers.enable(2);
     mesh.name = Math.random().toString(36).substr(2);
-    if (font == ENfont){
+    if (font == ENfont) {
         distanceText.push(mesh);
-    }else{
+    } else {
         roadNames.push(mesh);
     }
-    scene.add( mesh );
+    scene.add(mesh);
 }
 function drawPath(data) {
-    initColorMap(-200,-70);
+    initColorMap(-200, -70);
     var paths = data.paths;
     for (var p in paths) {
         var path = paths[p];
@@ -489,7 +499,7 @@ function drawPath(data) {
         var geometry = new THREE.Geometry();
         var material = new THREE.LineBasicMaterial({ vertexColors: true });
         var color1 = new THREE.Color(0x444444), color2 = new THREE.Color(0xFF0000);
-        var color = lut.getColor( path.pathloss );
+        var color = lut.getColor(path.pathloss);
         console.log(color);
         for (let i = 0; i < nodeList.length; i++) {
             nodeList[i].x = coordinateTransX(nodeList[i].x);
@@ -500,7 +510,7 @@ function drawPath(data) {
             var p2 = new THREE.Vector3(nodeList[i + 1].y, 0.3, nodeList[i + 1].x);
             geometry.vertices.push(p1);
             geometry.vertices.push(p2);
-            geometry.colors.push(color,color);
+            geometry.colors.push(color, color);
             var line = new THREE.Line(geometry, material, THREE.LineSegments);
             line.name = Math.random().toString(36).substr(2);
             scene.add(line);
@@ -508,16 +518,16 @@ function drawPath(data) {
             pathLines.push(line);
         }
     }
-    camera.layers.enable( 4 );
-    gui.add( layers, 'ray' ).onChange( function () {
-        camera.layers.toggle( 4 );
-    } );
+    camera.layers.enable(4);
+    gui.add(layers, 'ray').onChange(function () {
+        camera.layers.toggle(4);
+    });
 }
 
 
 
 // 3Dmodel
-function loadFbx(intersect, type){
+function loadFbx(intersect, type) {
     console.log("ok");
     console.log(intersect.point);
     console.log(type);
@@ -526,21 +536,21 @@ function loadFbx(intersect, type){
     var height = 0.6;
     var length = 0.5;
     var width = 2.1;
-    var point1 = {},point2 = {},point3 = {},point4 = {},point5 = {};
+    var point1 = {}, point2 = {}, point3 = {}, point4 = {}, point5 = {};
     var positions = [];
-    var x1 = x + length/2;
-    var y1 = y + width/2;
+    var x1 = x + length / 2;
+    var y1 = y + width / 2;
 
-    var x2 = x - length/2;
-    var y2 = y + width/2;
-
-
-    var x3 = x - length/2;
-    var y3 = y - width/2;
+    var x2 = x - length / 2;
+    var y2 = y + width / 2;
 
 
-    var x4 = x + length/2;
-    var y4 = y - width/2;
+    var x3 = x - length / 2;
+    var y3 = y - width / 2;
+
+
+    var x4 = x + length / 2;
+    var y4 = y - width / 2;
 
 
     point1.x = xToCoordinate(x1);
@@ -558,32 +568,32 @@ function loadFbx(intersect, type){
 
 
     vehicleDTO.bbox = [];
-    vehicleDTO.bbox.push(point1,point2,point3,point4,point5);
+    vehicleDTO.bbox.push(point1, point2, point3, point4, point5);
     vehicleDTO.height = height;
 
     var fbxloader = new THREE.FBXLoader();
-    fbxloader.load( 'bus/bus.fbx', function ( object ) {
+    fbxloader.load('bus/bus.fbx', function (object) {
 
-        object.traverse( function ( child ) {
-            if ( child.isMesh ) {
+        object.traverse(function (child) {
+            if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
             }
-        } );
+        });
         object.scale.set(0.0002, 0.0002, 0.0002);
         object.position.copy(intersect.point);
         object.position.y = 0.3;
         // object.rotateX(Math.PI * 6 / 4);
         // object.rotateY(camera.rotation._z);
-        object.rotateY(Math.PI/2);
+        object.rotateY(Math.PI / 2);
         object.name = Math.random().toString(36).substr(2);
-        scene.add( object );
+        scene.add(object);
         if (type == "tx") {
             tx.push(object);
         } else {
             rx.push(object);
         }
-    } );
+    });
 
 }
 
@@ -622,7 +632,7 @@ var camera2;
 
 var gui;
 //创建颜色板
-function initColorMap(min, max){
+function initColorMap(min, max) {
     container2 = document.createElement('colorMap');
     document.body.appendChild(container2);
     var width = 120;
@@ -630,8 +640,8 @@ function initColorMap(min, max){
     scene2 = new THREE.Scene(); //创建一个新场景
     //添加一个透视相机
     // CAMERA
-    camera2 = new THREE.PerspectiveCamera( 16,width /height, 1, 100 );
-    camera2.position.set( 0, 0,  10);
+    camera2 = new THREE.PerspectiveCamera(16, width / height, 1, 100);
+    camera2.position.set(0, 0, 10);
     //渲染
     //antialias:true增加抗锯齿效果
     renderer2 = new THREE.WebGLRenderer({
@@ -640,11 +650,11 @@ function initColorMap(min, max){
     });
     var colorMap = 'rainbow';
     var numberOfColors = 512;
-    lut = new THREE.Lut( colorMap, numberOfColors );
-    lut.setMax( max );
-    lut.setMin( min );
-    var legend = lut.setLegendOn( { 'position': { 'x': -0.3, 'y': -0.1, 'z': -5 }} );
-    var labels = lut.setLegendLabels( { 'title': 'PathLoss', 'um': 'dB', 'ticks': 5 } );
+    lut = new THREE.Lut(colorMap, numberOfColors);
+    lut.setMax(max);
+    lut.setMin(min);
+    var legend = lut.setLegendOn({ 'position': { 'x': -0.3, 'y': -0.1, 'z': -5 } });
+    var labels = lut.setLegendLabels({ 'title': 'PathLoss', 'um': 'dB', 'ticks': 5 });
     // renderer2.setClearColor(new THREE.Color(0xffffff)); //设置窗口背景颜色为黑
     renderer2.setClearAlpha(0);
     renderer2.setSize(width, height); //设置窗口尺寸
@@ -653,11 +663,11 @@ function initColorMap(min, max){
     container2.style.position = "absolute";
     container2.style.bottom = "100px";
     container2.style.right = "30px";
-    scene2.add( legend );
-    scene2.add( labels[ 'title' ] );
-    for ( var i = 0; i < Object.keys( labels[ 'ticks' ] ).length; i ++ ) {
-        scene2.add( labels[ 'ticks' ][ i ] );
-        scene2.add( labels[ 'lines' ][ i ] );
+    scene2.add(legend);
+    scene2.add(labels['title']);
+    for (var i = 0; i < Object.keys(labels['ticks']).length; i++) {
+        scene2.add(labels['ticks'][i]);
+        scene2.add(labels['lines'][i]);
     }
     renderer2.render(scene2, camera2);
 }
@@ -722,12 +732,12 @@ function main() {
 
 function plane() {
     var geometry = new THREE.PlaneBufferGeometry(100, 100);
-    geometry.rotateX(- Math.PI/2 );
+    geometry.rotateX(- Math.PI / 2);
     var plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: "#88918c", visible: true }));
     plane.layers.set(0);
-    gui.add( layers, 'plane' ).onChange( function () {
-        camera.layers.toggle( 0 );
-    } );
+    gui.add(layers, 'plane').onChange(function () {
+        camera.layers.toggle(0);
+    });
     scene.add(plane);
     objects.push(plane);
 }
@@ -736,7 +746,7 @@ function plane() {
 
 // cube2();
 var cubeMesh2;
-function cube2(){
+function cube2() {
     var height = 0.6;
     var length = 0.5;
     var width = 2.1;
@@ -782,36 +792,34 @@ function sphere() {
 }
 
 // 创建建筑
-function addMulGeometry(arrZ, arrX, height, mod) {
-    // var arrX=[4,0,0,2.5,4];
-    // var arrZ=[4,4,0,-2,0];
-    // var height=4;
-    var arrLength = arrX.length;
+function addMulGeometryNew(arrPoint, height, mod) {
+    console.log("log Here");
+    var arrLength = arrPoint.length;
     var city = [];
     for (var i = 0; i < arrLength; i++) {
-        city.push(new THREE.Vector2(arrZ[i],arrX[i]));
+        city.push(new THREE.Vector2(arrPoint[i][1], arrPoint[i][0]));//[x,y]
     }
     var depth = 0;
-    if (mod == "3d"){
+    if (mod == "3d") {
         depth = height;
     }
-    var extrudeSettings = { depth: depth, bevelEnabled: false};
+    var extrudeSettings = { depth: depth, bevelEnabled: false };
     var cityShape = new THREE.Shape(city);
     var points = cityShape.getPoints();
 
-    var geometryPoints = new THREE.BufferGeometry().setFromPoints( points );
+    var geometryPoints = new THREE.BufferGeometry().setFromPoints(points);
     // solid line
-    var line = new THREE.Line( geometryPoints, new THREE.LineBasicMaterial( { color: 0x8DEEEE } ) );
+    var line = new THREE.Line(geometryPoints, new THREE.LineBasicMaterial({ color: 0x8DEEEE }));
 
-    var particles = new THREE.Points( geometryPoints, new THREE.PointsMaterial( { color: '081469', size : 0.5 } ) );
+    var particles = new THREE.Points(geometryPoints, new THREE.PointsMaterial({ color: '081469', size: 0.5 }));
 
 
-    var geometry = new THREE.ExtrudeBufferGeometry( cityShape, extrudeSettings );
+    var geometry = new THREE.ExtrudeBufferGeometry(cityShape, extrudeSettings);
     var material = new THREE.MeshLambertMaterial({ //创建材料
         color: "#7e7d80",
         wireframe: false
     });
-    var mesh = new THREE.Mesh( geometry,  material);
+    var mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.x = -Math.PI / 2;
     mesh.rotation.z = -Math.PI / 2;
     mesh.name = "bd" + Math.random().toString(36).substr(2);
@@ -826,8 +834,48 @@ function addMulGeometry(arrZ, arrX, height, mod) {
     mesh.name = Math.random().toString(36).substr(2);
     scene.add(mesh);
     builidings.push(mesh);
-    // scene.add(line);
-    // scene.add(particles);
+}
+function addMulGeometry(arrZ, arrX, height, mod) {
+    var arrLength = arrX.length;
+    var city = [];
+    for (var i = 0; i < arrLength; i++) {
+        city.push(new THREE.Vector2(arrZ[i], arrX[i]));
+    }
+    var depth = 0;
+    if (mod == "3d") {
+        depth = height;
+    }
+    var extrudeSettings = { depth: depth, bevelEnabled: false };
+    var cityShape = new THREE.Shape(city);
+    var points = cityShape.getPoints();
+
+    var geometryPoints = new THREE.BufferGeometry().setFromPoints(points);
+    // solid line
+    var line = new THREE.Line(geometryPoints, new THREE.LineBasicMaterial({ color: 0x8DEEEE }));
+
+    var particles = new THREE.Points(geometryPoints, new THREE.PointsMaterial({ color: '081469', size: 0.5 }));
+
+
+    var geometry = new THREE.ExtrudeBufferGeometry(cityShape, extrudeSettings);
+    var material = new THREE.MeshLambertMaterial({ //创建材料
+        color: "#7e7d80",
+        wireframe: false
+    });
+    var mesh = new THREE.Mesh(geometry, material);
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.rotation.z = -Math.PI / 2;
+    mesh.name = "bd" + Math.random().toString(36).substr(2);
+    builidings.push(mesh);
+
+    line.rotation.x = -Math.PI / 2;
+    line.rotation.z = -Math.PI / 2;
+
+    particles.rotation.x = -Math.PI / 2;
+    particles.rotation.z = -Math.PI / 2;
+    mesh.layers.set(1);
+    mesh.name = Math.random().toString(36).substr(2);
+    scene.add(mesh);
+    builidings.push(mesh);
 }
 
 
@@ -842,40 +890,98 @@ function render() {
 //画线段
 function drawline(positions) {
     var geometry = new THREE.LineGeometry();
-    geometry.setPositions( positions );
+    geometry.setPositions(positions);
     // geometry.setColors( colors );
-    var matLine = new THREE.LineMaterial( {
+    var matLine = new THREE.LineMaterial({
         color: "#aa8f13",
         linewidth: 0.002,
         // vertexColors: THREE.VertexColors,
         dashed: false
-    } );
-    line = new THREE.Line2( geometry, matLine );
+    });
+    line = new THREE.Line2(geometry, matLine);
     line.computeLineDistances();
-    line.scale.set( 1, 1, 1 );
-    scene.add( line );
+    line.scale.set(1, 1, 1);
+    scene.add(line);
 }
-
-function drawMyLine(data){
-    var mypaths=data.paths;
-    console.log("mypaths:"+mypaths);
-    for(var path in mypaths){
-        var positionPath=path.nodeList;
-        var MyPositionS=[];
-        for(var p in positionPath){
-            console.log(p.x,p.y);
-            MyPositionS.push(coordinateTransX(p.x),0.5,coordinateTransY(p.y));
-        }
-        drawline(MyPositionS);
+function addLines(datas,colorS) {
+    var geometry = new THREE.Geometry();//声明一个空几何体对象
+    for (var i = 0; i < datas.length; i++) {
+        geometry.vertices.push(new THREE.Vector3(datas[i][0], 0.1, datas[i][1]));
+    }
+    var material = new THREE.LineBasicMaterial({
+        color: colorS //线条颜色
+    });//材质对象
+    var line = new THREE.Line(geometry, material);//线条模型对象
+    scene.add(line);//线条对象添加到场景中
+}
+function drawMyMaps(data){
+    var mymaps=data.data;
+    for(var p in mymaps){
+        addLines([[mymaps[p][0]-50,mymaps[p][1]-50],[mymaps[p][2]-50,mymaps[p][3]-50]],0x00ff00);
     }
 }
+function drawMyLine(data) {
+    var mypaths = data.paths;
+
+    for (var path in mypaths) {
+        console.log(path);
+        var positionPath = mypaths[path].nodeList;
+        var MyPositionS = [];
+        for (var p in positionPath) {
+
+            //console.log(positionPath[p].x,positionPath[p].y);
+            console.log(positionPath[p].x, positionPath[p].y);
+            MyPositionS.push([positionPath[p].x, positionPath[p].y]);
+        }
+        // var geometry = new THREE.Geometry();
+        // var material = new THREE.LineBasicMaterial({ vertexColors: true });
+        // var color1 = new THREE.Color(0x444444), color2 = new THREE.Color(0xFF0000);
+        // for(var i=0;i<MyPositionS.length-1;i++){
+        //     var p1 = new THREE.Vector3(MyPositionS[i][0], 0.3, MyPositionS[i][1]);
+        //     var p2 = new THREE.Vector3(MyPositionS[i + 1][0], 0.3, MyPositionS[i + 1][1]);
+        //     geometry.vertices.push(p1);
+        //     geometry.vertices.push(p2);
+        //     geometry.colors.push(color1,color2);
+        //     var line = new THREE.Line(geometry, material, THREE.LineSegments);
+        //     line.name = Math.random().toString(36).substr(2);
+        //     scene.add(line);
+        //     line.layers.set(4);
+        //     pathLines.push(line);
+        // }
+        addLines(MyPositionS,0xff0000);
+    }
+}
+function drawMapOutlines(data){
+    var outlines=data.data;
+    console.log(outlines);
+    for(var outline in outlines){
+        var outli=outlines[outline];
+        var MyPositionS = [];
+        MyPositionS.push([outli[0],outli[1]]);
+        MyPositionS.push([outli[2],outli[3]]);
+        addLines(MyPositionS,0xffff00);
+        // console.log(outli);
+        // console.log(outli[0],outli[1],outli[2],outli[3]);
+    }
+}
+//addLines([[20, 20], [20, 0]]);//[[y,x]]
+addLines([[0, 0], [50, 0]], "#ffff00");
+addLines([[25, 0], [25, 3]], "#ffff00");
+addLines([[0, 20], [3, 20]], "#ffff00");
+addLines([[0, 30], [3, 30]], "#ffff00");
+
+addLines([[0, 0], [0, 50]], "#ffff00");
+// var testPosition=[[-50,-50],[50,-50],[50,50],[-50,50]];
+// addLines(testPosition);
+// testPosition=[[-2.2786273650064914 -7.033614483760113],[13.37613193646929 -39.13063479757311]];
+// addLines(testPosition);
 
 var positions = [];
-positions.push(-40,0.5,-40);
-positions.push(40,0.5,-40);
-positions.push(40,0.5,40);
-positions.push(-40,0.5,40);
-positions.push(-40,0.5,-40);
+positions.push(-40, 0.5, -40);
+positions.push(40, 0.5, -40);
+positions.push(40, 0.5, 40);
+positions.push(-40, 0.5, 40);
+positions.push(-40, 0.5, -40);
 drawline(positions);
 
 

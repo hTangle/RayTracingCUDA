@@ -59,6 +59,9 @@
     <ClCompile Include="..\QtWebApp\logging\filelogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\controller\fileuploadcontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\controller\formcontroller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -122,11 +125,11 @@
     <ClCompile Include="..\QtWebApp\templateengine\templateloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RayTracingCUDA.cpp">
+    <ClCompile Include="MyRayTracingCPUcpp.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\controller\fileuploadcontroller.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="RayTracingCUDA.cpp">
+      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,15 +220,6 @@
     <ClInclude Include="src\type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MyCUDARayTracing.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RayTracingCUDA.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticConstants.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -242,9 +236,6 @@
     <QtRcc Include="qml.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <None Include="main.qml" />
-    <None Include="main.qml" />
-    <None Include="main.qml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="etc\docroot\js\ColladaLoader.js">
@@ -415,9 +406,6 @@
     <None Include="etc\docroot\js\libs\jszip.min.js">
       <Filter>Distribution Files</Filter>
     </None>
-    <None Include="main.qml">
-      <Filter>Distribution Files</Filter>
-    </None>
     <None Include="etc\docroot\js\matrix.js">
       <Filter>Distribution Files</Filter>
     </None>
@@ -466,6 +454,17 @@
     <None Include="etc\docroot\css\webgl.css">
       <Filter>Distribution Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyCUDARayTracing.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingCUDA.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticConstants.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="MyRayTracingCUDA.cu" />

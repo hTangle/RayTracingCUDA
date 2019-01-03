@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 var fileInput = document.getElementById('file-input');
 var fileInput2 = document.getElementById('dbf-file-input');
 var roadfileInput = document.getElementById('road-file-input');
@@ -122,6 +116,7 @@ function parseFile() {
         shp = shpBuffer;
         dbf = dbfBuffer;
     }
+    //读取shp时
     shapefile.open(shp,dbf)
         .then(source => source.read()
             .then(function log(result) {
@@ -150,6 +145,7 @@ function parseFile() {
             }).then(function () {
                 senario.type = "senario";
                 var str = JSON.stringify(senario);
+                console.log(str);
                 sendMessage(str);
             }))
         .catch(error => console.error(error.stack));
@@ -159,7 +155,7 @@ function parseDefaultfile(name){
     var building = "./" + name + "/BUILDING_nanjing.shp";
     var road = "./" + name + "/R.shp";
     var roaddbf = "./" + name + "/R.dbf";
-    console.log(building);
+    //console.log(building);
     if(gui.domElement.children[1].childElementCount > 1){
         var nav = document.getElementById("gui");
         nav.removeChild(nav.firstElementChild);
@@ -205,9 +201,9 @@ function parseDefaultfile(name){
             }).then(function () {
                 drawSenario(senario,"3d");
             }).then(function () {
-                senario.type = "senario";
-                var str = JSON.stringify(senario);
-                sendMessage(str);
+                // senario.type = "senario";
+                // var str = JSON.stringify(senario);
+                // sendMessage(str);
             }))
         .catch(error => console.error(error.stack));
 

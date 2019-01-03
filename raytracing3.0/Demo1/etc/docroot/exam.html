@@ -27,7 +27,28 @@
             canvas: mycanvas,
             antialias: true
         });
-        renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        function addLines(datas){
+        	var geometry = new THREE.Geometry();//声明一个空几何体对象
+        	for(var i=0;i<datas.length;i++){
+        		geometry.vertices.push(new THREE.Vector3(datas[i][0],datas[i][1],0));
+        	}
+    		// geometry.vertices.push(new THREE.Vector3(0,10,0));
+    		// geometry.vertices.push(new THREE.Vector3(10,0,0));
+
+        	// for(var data in datas){
+        	// 	geometry.vertices.push(new THREE.Vector3(data[0], 0 ,data[1])); //顶点坐标添加到geometry对象
+        	// }
+            // var p1 = new THREE.Vector3(t[0]*2, t[1]*2, 0);//顶点1坐标
+            // var p2 = new THREE.Vector3(t[2]*2, t[3]*2, 0);//顶点2坐标
+            // geometry.vertices.push(p1, p2); //顶点坐标添加到geometry对象
+            var material = new THREE.LineBasicMaterial({
+                color: 0xffff00 //线条颜色
+            });//材质对象
+            var line = new THREE.Line(geometry, material);//线条模型对象
+            scene.add(line);//线条对象添加到场景中
+        }
+        addLines([[100,100],[200,200],[300,300],[400,200],[500,400]]);
         function addLine(t) {
             var geometry = new THREE.Geometry();//声明一个空几何体对象
             var p1 = new THREE.Vector3(t[0]*2, t[1]*2, 0);//顶点1坐标
@@ -39,12 +60,12 @@
             var line = new THREE.Line(geometry, material);//线条模型对象
             scene.add(line);//线条对象添加到场景中
         }
-        function addLineHere(datas){
-            for(var j=0;j<datas.length;j++){
-                addLine(datas[j]);
-            }
-        }
-        addLineHere(mydata);
+        // function addLineHere(datas){
+        //     for(var j=0;j<datas.length;j++){
+        //         addLine(datas[j]);
+        //     }
+        // }
+        // addLineHere(mydata);
         // var geome
         //try = new THREE.Geometry();
         // geometry.vertices.push(
