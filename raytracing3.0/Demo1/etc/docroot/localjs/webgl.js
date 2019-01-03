@@ -241,9 +241,16 @@ function onDocumentMouseDown(event) {
             vehicleDTO.location1 = [x, y];//
             console.log(vehicleDTO);
             sendJSONDataToBack("vehicle", vehicleDTO);
+            console.log(vehicleDTO.vehicleType);
+            if (vehicleDTO.vehicleType == 'rx') {
+                $("#RXCoordinate").html("(" + x + "," + y + ")");
+            } else if (vehicleDTO.vehicleType == 'tx') {
+                $("#TXCoordinate").html("(" + x + "," + y + ")");
+            }
             //var str = JSON.stringify(vehicleDTO);
             //sendMessage(str);
             stopListen();
+            
 
         } else {
             if (count == 1) {

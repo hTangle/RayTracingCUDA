@@ -45,6 +45,7 @@ private Q_SLOTS:
 	QString generateMap();
 	QString runGenerateMap();
 	QString updateMapData(QJsonObject jsonObject);
+	void sendLogMessage(QString sendInfo);
 private:
     QWebSocketServer *m_pWebSocketServer;
     QList<QWebSocket *> m_clients;

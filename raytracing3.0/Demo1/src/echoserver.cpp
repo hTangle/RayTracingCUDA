@@ -6,6 +6,8 @@
 #include <QJsonDocument>
 #include "echoserver.h"
 #include "QJsonArray"
+#include <QDateTime>
+
 QT_USE_NAMESPACE
 
 //! [constructor]
@@ -97,7 +99,17 @@ void EchoServer::socketDisconnected()
 	}
 }
 //! [socketDisconnected]
-
+void EchoServer::sendLogMessage(QString sendInfo) {
+	QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+	if (pClient) {
+		QJsonObject json;
+		json.insert("type", QString("logOutput"));
+		json.insert("data", QString("%1:%2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(sendInfo));
+		QJsonDocument doc(json);
+		QString strJson(doc.toJson(QJsonDocument::Compact));
+		pClient->sendTextMessage(strJson);
+	}
+}
 QString EchoServer::VPL() {
 	if (rayTracingCUDA->Rx_x == -100 || rayTracingCUDA->Rx_y == -100 || rayTracingCUDA->Tx_x == -100 || rayTracingCUDA->Tx_y == -100) {
 		QJsonObject json;
@@ -194,6 +206,12 @@ QString EchoServer::updateMapData(QJsonObject jsonObject) {
 			preY = y;
 		}
 	}
+	if (updateFlag) {
+		sendLogMessage(QString("update map data succeed"));
+	}
+	else {
+		sendLogMessage(QString("some error happened when updating map data"));
+	}
 	QJsonObject json;
 	json.insert("type", QString("updateMapData"));
 	json.insert("state", updateFlag);
@@ -249,6 +267,7 @@ void EchoServer::updateVehicle(QJsonObject vehicle) {
 		rayTracingCUDA->Rx_x = y + 50;
 		rayTracingCUDA->Rx_y = x + 50;
 	}
+	sendLogMessage(QString("update successful，vehicle is %1,and location is [%2,%3]").arg(vehicleType).arg(x).arg(y));
 	//QString vehicleType = vehicle["vehicleType"].toString();
 	//bool dynamic = vehicle["dynamic"].toBool();
 	//int speed = vehicle["speed"].toString().toInt();

@@ -30,7 +30,26 @@ fileInput.addEventListener('change', function () {
     reader.readAsArrayBuffer(file);
 
 });
-
+$(document).ready(function () {
+    $("#MapOfSeu").click(function () {
+        parseDefaultfile('seu');
+        $("#MapOfSeuIsActive").html("True");
+        $("#MapOfZhongShanLuIsActive").html("False");
+        $("#MapOfNeiHuanDongXianIsActive").html("False");
+    });
+    $("#MapOfZhongShanLu").click(function () {
+        parseDefaultfile('zsl');
+        $("#MapOfSeuIsActive").html("False");
+        $("#MapOfZhongShanLuIsActive").html("True");
+        $("#MapOfNeiHuanDongXianIsActive").html("False");
+    });
+    $("#MapOfNeiHuanDongXian").click(function () {
+        parseDefaultfile('nhdx');
+        $("#MapOfSeuIsActive").html("False");
+        $("#MapOfZhongShanLuIsActive").html("False");
+        $("#MapOfNeiHuanDongXianIsActive").html("True");
+    });
+});
 roadfileInput.addEventListener('change', function () {
 
 
@@ -151,7 +170,21 @@ function parseFile() {
         .catch(error => console.error(error.stack));
 }
 
-function parseDefaultfile(name){
+function parseDefaultfile(name) {
+    if (name == "seu") {
+        $("#MapOfSeuIsActive").html("True");
+        $("#MapOfZhongShanLuIsActive").html("False");
+        $("#MapOfNeiHuanDongXianIsActive").html("False");
+    } else if (name == "zsl") {
+        $("#MapOfSeuIsActive").html("False");
+        $("#MapOfZhongShanLuIsActive").html("True");
+        $("#MapOfNeiHuanDongXianIsActive").html("False");
+    } else if (name =="nhdx"){
+        $("#MapOfSeuIsActive").html("False");
+        $("#MapOfZhongShanLuIsActive").html("False");
+        $("#MapOfNeiHuanDongXianIsActive").html("True");
+    }
+
     var building = "./" + name + "/BUILDING_nanjing.shp";
     var road = "./" + name + "/R.shp";
     var roaddbf = "./" + name + "/R.dbf";

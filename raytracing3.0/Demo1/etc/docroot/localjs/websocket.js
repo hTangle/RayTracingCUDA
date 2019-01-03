@@ -65,6 +65,9 @@ function initWebSocket() {
                 drawMapOutlines(data);
             } else if (data.type == "updateMapData") {
 
+            } else if (data.type == "logOutput") {
+                console.log(data.data);
+                $("#logOutput").append(data.data + "</br>");
             }
         };
         websocket.onerror = function (evt) {

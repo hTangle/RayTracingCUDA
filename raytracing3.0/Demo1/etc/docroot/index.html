@@ -19,11 +19,15 @@
             background-color: #c3c3c3;
             bottom: 0px;
         }
+
+        body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
     </style>
 </head>
 
 
-<!--图层 three.js/example/layers-->
 <body>
     <header class="navbar fixed-top navbar-expand-sm navbar-light bg-light" style="background-color: #e3f2fd;">
 
@@ -353,23 +357,34 @@
                                 <tr>
                                     <td>
                                         <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="bottom"
-                                                title="点击可以更新车辆状态">
-                                            001
+                                                title="点击更换地图为东大四牌楼校区" id="MapOfSeu">
+                                            东大四牌楼校区
                                         </button>
                                     </td>
-                                    <td>RX</td>
-                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td id="MapOfSeuIsActive">False</td>
+                                    <td>普通城区地图</td>
                                     <td>A</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                data-placement="bottom" title="点击可以更新车辆状态">
-                                            002
+                                                data-placement="bottom" title="点击更换地图为中山路" id="MapOfZhongShanLu">
+                                            中山路
                                         </button>
                                     </td>
-                                    <td>TX</td>
-                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td id="MapOfZhongShanLuIsActive">False</td>
+                                    <td>建筑多的城区地图</td>
+                                    <td>A</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
+                                                data-placement="bottom" title="点击更换地图为内环东路" id="MapOfNeiHuanDongXian">
+                                            内环东路
+                                        </button>
+                                    </td>
+                                    <td id="MapOfNeiHuanDongXianIsActive">False</td>
+                                    <td>道路复杂的地图</td>
                                     <td>A</td>
                                 </tr>
                             </tbody>
@@ -546,12 +561,12 @@
                                 <tr>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
-                                                data-placement="bottom" title="点击可以更新车辆状态">
+                                                data-placement="bottom" title="点击可以更新车辆坐标">
                                             001
                                         </button>
                                     </td>
                                     <td>RX</td>
-                                    <td id="TX_Coordinate">(13.5,6.2)</td>
+                                    <td id="RXCoordinate">None</td>
                                     <td>A</td>
                                     <td>B</td>
                                     <td>C</td>
@@ -566,12 +581,12 @@
                                 <tr>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                data-placement="bottom" title="点击可以更新车辆状态">
+                                                data-placement="bottom" title="点击可以更新车辆坐标">
                                             002
                                         </button>
                                     </td>
                                     <td>TX</td>
-                                    <td id="RX_Coordinate">(14.5,7.5)</td>
+                                    <td id="TXCoordinate">None</td>
                                     <td>A</td>
                                     <td>B</td>
                                     <td>C</td>
@@ -624,185 +639,17 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="list-output" role="tabpanel" aria-labelledby="list-output-list">
-                        我将这个地方注释掉了，事实上可以放置output输出结果的
-                        <!-- <table class="table table-hover table-bordered">
-                                    <thead class="thead-light">
-                                        <tr class="active">
-                                            <th>Car ID</th>
-                                            <th>State</th>
-                                            <th>Coordinate</th>
-                                            <th>Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
-                                                    data-placement="bottom" title="点击可以更新车辆状态">
-                                                    001
-                                                </button></td>
-                                            <td>RX</td>
-                                            <td id="TX_Coordinate">(13.5,6.2)</td>
-                                            <td>A</td>
-                                        </tr>
-                                        <tr>
-                                            <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                    data-placement="bottom" title="点击可以更新车辆状态">
-                                                    002
-                                                </button></td>
-                                            <td>TX</td>
-                                            <td id="RX_Coordinate">(14.5,7.5)</td>
-                                            <td>A</td>
-                                        </tr>
-                                    </tbody>
-                                </table> -->
+                        <div class="card">
+                            <div class="card-body" style="height:320px;">
+                                <div id="logOutput" style="height:320px;overflow-x:auto;overflow-y:auto"></div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
             </div>
         </div>
-        <!-- <div class="accordion" id="accordionExample">
-                    <div class="card">
-                        <div class="card-header" id="headingOne">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                                    aria-expanded="true" aria-controls="collapseOne">
-                                    车辆位置信息
-                                </button>
-                            </h5>
-                        </div>
-
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <div style="height: 400px" class="card card-success">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr class="active">
-                                                <th>Car ID</th>
-                                                <th>State</th>
-                                                <th>Coordinate</th>
-                                                <th>Type</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="table-success">
-                                                <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
-                                                        data-placement="bottom" title="点击可以更新车辆状态">
-                                                        001
-                                                    </button></td>
-                                                <td>RX</td>
-                                                <td id="TX_Coordinate">(13.5,6.2)</td>
-                                                <td>A</td>
-                                            </tr>
-                                            <tr class="table-danger">
-                                                <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                        data-placement="bottom" title="点击可以更新车辆状态">
-                                                        002
-                                                    </button></td>
-                                                <td>TX</td>
-                                                <td id="RX_Coordinate">(14.5,7.5)</td>
-                                                <td>A</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header" id="headingTwo">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
-                                    aria-expanded="false" aria-controls="collapseTwo">
-                                    地图建筑信息
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <div style="height: 400px" class="card card-success">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr class="active">
-                                                <th>Car ID</th>
-                                                <th>State</th>
-                                                <th>Coordinate</th>
-                                                <th>Type</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="table-success">
-                                                <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
-                                                        data-placement="bottom" title="点击可以更新车辆状态">
-                                                        001
-                                                    </button></td>
-                                                <td>RX</td>
-                                                <td id="TX_Coordinate">(13.5,6.2)</td>
-                                                <td>A</td>
-                                            </tr>
-                                            <tr class="table-danger">
-                                                <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                        data-placement="bottom" title="点击可以更新车辆状态">
-                                                        002
-                                                    </button></td>
-                                                <td>TX</td>
-                                                <td id="RX_Coordinate">(14.5,7.5)</td>
-                                                <td>A</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header" id="headingThree">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree">
-                                    日志输出
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <div style="height: 400px" class="card card-success">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr class="active">
-                                                <th>Car ID</th>
-                                                <th>State</th>
-                                                <th>Coordinate</th>
-                                                <th>Type</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="table-success">
-                                                <td><button type="button" class="btn btn-success btn-sm" data-toggle="tooltip"
-                                                        data-placement="bottom" title="点击可以更新车辆状态">
-                                                        001
-                                                    </button></td>
-                                                <td>RX</td>
-                                                <td id="TX_Coordinate">(13.5,6.2)</td>
-                                                <td>A</td>
-                                            </tr>
-                                            <tr class="table-danger">
-                                                <td><button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                        data-placement="bottom" title="点击可以更新车辆状态">
-                                                        002
-                                                    </button></td>
-                                                <td>TX</td>
-                                                <td id="RX_Coordinate">(14.5,7.5)</td>
-                                                <td>A</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-        <!--  -->
     </div>
     <div class="collapse position-absolute" id="collapseExample01" style="bottom:0px;right: 0px;">
         <div class="card card-body">
