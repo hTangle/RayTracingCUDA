@@ -82,6 +82,22 @@ void EchoServer::processTextMessage(QString message)
 			else if (type == "requireMapData") {
 				pClient->sendTextMessage(rayTracingCUDA->getMapDataJSON());
 			}
+			else if (type == "readCUDAInformation") {
+				vector<QString> getInformation = rayTracingCUDA->getCUDADetailInformation();
+				if (getInformation.size() > 0) {
+					for (int i = 0; i < getInformation.size(); i+=9) {
+						sendLogMessage(QString("drivers:%1").arg(getInformation[i]));
+						sendLogMessage(QString("name  :%1").arg(getInformation[i+1]));
+						sendLogMessage(QString("totalGlobalMem  :%1").arg(getInformation[i+2]));
+						sendLogMessage(QString("sharedMemPerBlock  :%1").arg(getInformation[i+3]));
+						sendLogMessage(QString("regsPerBlock  :%1").arg(getInformation[i+4]));
+						sendLogMessage(QString("maxThreadsPerBlock  :%1").arg(getInformation[i+4]));
+						sendLogMessage(QString("major  :%1").arg(getInformation[i+6]));
+						sendLogMessage(QString("minor :%1").arg(getInformation[i+7]));
+						sendLogMessage(QString("multiProcessorCount :%1").arg(getInformation[i+8]));
+					}
+				}
+			}
 		}
 }
 //! [processTextMessage]
@@ -188,6 +204,7 @@ QString EchoServer::VPL() {
 	//QString strJson(doc.toJson(QJsonDocument::Compact));
 	//return strJson;
 }
+
 QString EchoServer::updateMapData(QJsonObject jsonObject) {
 	rayTracingCUDA->clear();//需要更新地图数据时，先进行清空处理
 	QJsonArray pointXs = jsonObject["data"].toArray();
@@ -200,7 +217,7 @@ QString EchoServer::updateMapData(QJsonObject jsonObject) {
 		for (int i = 1; i < currentArr.count(); i++) {
 			double x = (currentArr[i].toArray()[0].toDouble()) + 50;
 			double y = (currentArr[i].toArray()[1].toDouble()) + 50;
-			qDebug() << preX << "," << preY;
+			//qDebug() << preX << "," << preY;
 			updateFlag = rayTracingCUDA->addEdgeToGrids(preX, preY, x, y);
 			preX = x;
 			preY = y;

@@ -31,6 +31,7 @@ fileInput.addEventListener('change', function () {
 
 });
 $(document).ready(function () {
+    sendDataToBack("readCUDAInformation", "");
     $("#MapOfSeu").click(function () {
         parseDefaultfile('seu');
         $("#MapOfSeuIsActive").html("True");

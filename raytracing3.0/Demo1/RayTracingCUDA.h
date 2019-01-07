@@ -24,7 +24,7 @@ public:
 	MyEdge *myedge = new MyEdge[MAX_EDGE_GRID];
 	bool insert(double x1, double y1, double x2, double y2, double vx, double vy) {
 		if (N >= MAX_EDGE_GRID - 1) {
-			qDebug() << "exceed"<< MAX_EDGE_GRID;
+			qDebug() << "exceed" << MAX_EDGE_GRID;
 			return false;
 		}
 		else {
@@ -57,6 +57,9 @@ public:
 	//vector<vector<double>> grids[ROW*COL];
 	double Tx_x = -100, Tx_y = -100, Rx_x = -100, Rx_y = -100;
 	int RayNumbers;
+	vector<QString> getCUDADetailInformation() {
+		return getCUDAInformation();
+	}
 public:
 	RayTracingCUDA();
 	~RayTracingCUDA();
@@ -130,7 +133,7 @@ public:
 		}
 		qDebug() << "data inited succeed, there has " << edgeCount << "edges";
 
-		vector<vector<double>> getResult = initCUDAInput(grids, Tx_x, Tx_y, Rx_x, Rx_y, 1080);
+		vector<vector<double>> getResult = initCUDAInput(grids, Tx_x, Tx_y, Rx_x, Rx_y, 360);
 		qDebug() << "calculation finished";
 		//ofstream out("line.txt");
 		QJsonObject json;
@@ -260,14 +263,18 @@ public:
 	//需要将这个墙面加入到坐标系统
 	//我们的grid系统是50*50的网格，每个网格的边长为2
 	//将问题抽象为 从起点x1,y1出发，到x2,y2为止，每次碰到的墙面
+	double direction(double v1x,double v1y,double v2x,double v2y) {
+		//返回为正，则
+		return (v1x*v2y - v2x * v1y);
+	}
 	bool addEdgeToGrids(double x1, double y1, double x2, double y2) {
-		double vectorX, vectorY, normalVectorX, normalVectorY;//法向量
+		double normalVectorX, normalVectorY;//法向量
 		//这地方直接求法向量，而且法向量位于直线的顺时针方向
-		normalVectorX = y2 - y1;//y
-		normalVectorY = x1 - x2;//-x
-		vectorX = x2 - x1;
-		vectorY = y2 - y1;
-		normalizationVector(vectorX, vectorY);//归一化
+		normalVectorX = y1 - y2;//-y
+		normalVectorY = x2 - x1;//x
+		//vectorX = x2 - x1;
+		//vectorY = y2 - y1;
+		//normalizationVector(vectorX, vectorY);//归一化
 		normalizationVector(normalVectorX, normalVectorY);
 		int row = int(y1 / LENGTH);
 		int col = int(x1 / LENGTH);
@@ -281,8 +288,8 @@ public:
 		minCol = minCol >= COL ? COL - 1 : minCol;
 		targetRow = targetRow >= ROW ? ROW - 1 : targetRow;
 		targetCol = targetCol >= COL ? COL - 1 : targetCol;
-		qDebug() << "[" << x1 << "," << y1 << "],[" << x2 << "," << y2 << "]";
-		qDebug() << "[" << minRow << "," << targetRow << "],[" << minCol << "," << targetCol << "]";
+		//qDebug() << "[" << x1 << "," << y1 << "],[" << x2 << "," << y2 << "]";
+		//qDebug() << "[" << minRow << "," << targetRow << "],[" << minCol << "," << targetCol << "]";
 		//[66.2588, 98.8762], [66.6485, 100]
 		//if()
 		bool flag = true;

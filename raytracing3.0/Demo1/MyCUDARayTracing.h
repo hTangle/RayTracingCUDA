@@ -1,6 +1,7 @@
 #pragma once
 #include <StaticConstants.h>
 #include <vector>
+#include <QString>
 using namespace std;
 
 struct Point
@@ -44,4 +45,5 @@ struct Grids
 
 vector<vector<double>> initCUDAInput(Grids *grids, double TX_X, double TX_Y, double RX_X, double RX_Y, int N);
 vector<vector<double>> initCUDAInputCPU(Grids *grids, double TX_X, double TX_Y, double RX_X, double RX_Y, int N);
+vector<QString> getCUDAInformation();
 //vector<vector<double>> initCUDAInput(vector<vector<vector<double>>> grid_input, double TX_X, double TX_Y, double RX_X, double RX_Y, int N);
