@@ -421,8 +421,8 @@ function drawRoad(roads) {
             var y1 = coordinateTransY(p1[1]);
             var x2 = coordinateTransX(p2[0]);
             var y2 = coordinateTransY(p2[1]);
-            var q1 = new THREE.Vector3(y1, 0.1, x1);
-            var q2 = new THREE.Vector3(y2, 0.1, x2);
+            var q1 = new THREE.Vector3(x1, 0.1, y1);
+            var q2 = new THREE.Vector3(x2, 0.1, y2);
             geometry.vertices.push(q1);
             geometry.vertices.push(q2);
             geometry.colors.push(color1, color2);

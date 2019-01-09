@@ -223,6 +223,7 @@ QString EchoServer::updateMapData(QJsonObject jsonObject) {
 			preY = y;
 		}
 	}
+	//rayTracingCUDA->updateMapdata();//边已经添加完毕了，之后就可以将数据写入GPU
 	if (updateFlag) {
 		sendLogMessage(QString("update map data succeed"));
 	}
@@ -279,10 +280,12 @@ void EchoServer::updateVehicle(QJsonObject vehicle) {
 	if (vehicleType == "tx") {
 		rayTracingCUDA->Tx_x = y + 50;
 		rayTracingCUDA->Tx_y = x + 50;
+		rayTracingCUDA->updateTx(y + 50, x + 50);
 	}
 	else if (vehicleType == "rx") {
 		rayTracingCUDA->Rx_x = y + 50;
 		rayTracingCUDA->Rx_y = x + 50;
+		rayTracingCUDA->updateRx(y + 50, x + 50);
 	}
 	sendLogMessage(QString("update successful，vehicle is %1,and location is [%2,%3]").arg(vehicleType).arg(x).arg(y));
 	//QString vehicleType = vehicle["vehicleType"].toString();

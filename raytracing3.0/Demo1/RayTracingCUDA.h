@@ -51,6 +51,8 @@ class RayTracingCUDA
 {
 public:
 	MyGrid *mygrid = new MyGrid[COL*ROW];
+	CUDARayTracingGPU raytracingGPU;
+
 	//vector<list<list<double>>> girdList;
 	//vector<vector<vector<double>>> grid_input;
 	//MyClass *myClass = new MyClass[ROW*COL];
@@ -58,86 +60,128 @@ public:
 	double Tx_x = -100, Tx_y = -100, Rx_x = -100, Rx_y = -100;
 	int RayNumbers;
 	vector<QString> getCUDADetailInformation() {
-		return getCUDAInformation();
+		return raytracingGPU.getCUDAInformation();
 	}
 public:
-	RayTracingCUDA();
-	~RayTracingCUDA();
+	RayTracingCUDA() {
+		raytracingGPU.setN(360);
+		raytracingGPU.init();
+	}
+	~RayTracingCUDA() {
+
+	}
 	//我clear的做法是之间将N置0，N是一个指针，指示存了多少个边
+	void updateTx(double x, double y) {
+		raytracingGPU.updateTx(x, y);
+	}
+	void updateRx(double x, double y) {
+		raytracingGPU.updateRx(x, y);
+	}
 	void clear() {
-		for (int i = 0; i < COL*ROW; i++) {
-			mygrid[i].clear();
-		}
+		raytracingGPU.clearGrids();
 	}
 	QString runInputDataCUDA(struct Grids *grids) {
 		qDebug() << "begin CUDA";
-
-		vector<vector<double>> getResult = initCUDAInput(grids, 0.25 + 50, 0.25 + 50, 0.25 + 50, 0.25 + 30, 180);
-		qDebug() << "calculation finished";
-		//ofstream out("line.txt");
 		QJsonObject json;
 		json.insert("type", QString("output"));
-		QJsonArray paths;
-		QJsonObject pointTemp;
-		pointTemp.insert("x", Tx_x - 50);
-		pointTemp.insert("y", (Tx_y - 50));
-		pointTemp.insert("z", 0);
-		qDebug() << "getResult.size()" << getResult.size();
-		for (int i = 0; i < getResult.size(); i++) {
-			QJsonObject path;
-			path.insert("pathloss", -117.8);
-			QJsonArray nodeList;
-			nodeList.push_back(pointTemp);
-			for (int j = 0; j < getResult[i].size(); j += 2) {
-				QJsonObject point;
-				point.insert("x", (getResult[i][j] - 50));
-				point.insert("y", (getResult[i][j + 1] - 50));
-				point.insert("z", 0);
-				//qDebug() << (getResult[i][j] - 50)<< "," << (getResult[i][j + 1] - 50);
-				nodeList.push_back(point);
-			}
-			path.insert("nodeList", nodeList);
-			paths.push_back(path);
-		}
-		json.insert("paths", paths);
-		json.insert("state", QString("1"));
+		//if (raytracingGPU->isReady()) {
+		//	vector<vector<double>> getResult = raytracingGPU->initCUDAInput();
+		//	QJsonArray paths;
+		//	QJsonObject pointTemp;
+		//	pointTemp.insert("x", Tx_x - 50);
+		//	pointTemp.insert("y", (Tx_y - 50));
+		//	pointTemp.insert("z", 0);
+		//	qDebug() << "getResult.size()" << getResult.size();
+		//	for (int i = 0; i < getResult.size(); i++) {
+		//		QJsonObject path;
+		//		path.insert("pathloss", -117.8);
+		//		QJsonArray nodeList;
+		//		nodeList.push_back(pointTemp);
+		//		for (int j = 0; j < getResult[i].size(); j += 2) {
+		//			QJsonObject point;
+		//			point.insert("x", (getResult[i][j] - 50));
+		//			point.insert("y", (getResult[i][j + 1] - 50));
+		//			point.insert("z", 0);
+		//			//qDebug() << (getResult[i][j] - 50)<< "," << (getResult[i][j + 1] - 50);
+		//			nodeList.push_back(point);
+		//		}
+		//		path.insert("nodeList", nodeList);
+		//		paths.push_back(path);
+		//	}
+		//	json.insert("paths", paths);
+		//	json.insert("state", QString("1"));
+		//	qDebug() << "calculations finished";
+		//}
+		//else {
+		//	qDebug() << "calculations do not begin";
+		//	
+		//}
+		json.insert("state", QString("0"));
 		QJsonDocument doc(json);
 		QString strJson(doc.toJson(QJsonDocument::Compact));
 		qDebug() << "Send Message";
 		return strJson;
 	}
+	void updateMapdata() {
+		//struct Grids *grids = (struct Grids *)malloc(sizeof(struct Grids));
+		//grids->width = LENGTH;
+		//grids->height = LENGTH;
+		//int edgeCount = 0;
+		//for (int i = 0; i < ROW*COL; i++) {
+		//	if (mygrid[i].N != 0) {
+		//		grids->grids[i].N = mygrid[i].N;
+		//		edgeCount += mygrid[i].N;
+		//		grids->grids[i].isContains = true;
+		//		for (int j = 0; j < mygrid[i].N; j++) {
+		//			grids->grids[i].edges[j].xstart = mygrid[i].myedge[j].x1;
+		//			grids->grids[i].edges[j].ystart = mygrid[i].myedge[j].y1;
+		//			grids->grids[i].edges[j].xend = mygrid[i].myedge[j].x2;
+		//			grids->grids[i].edges[j].yend = mygrid[i].myedge[j].y2;
+		//			grids->grids[i].edges[j].vectorX = mygrid[i].myedge[j].vx;
+		//			grids->grids[i].edges[j].vectorY = mygrid[i].myedge[j].vy;
+		//		}
+		//	}
+		//	else {
+		//		grids->grids[i].N = 0;
+		//		grids->grids[i].isContains = false;
+		//	}
+		//}
+		//qDebug() << "data inited succeed, there has " << edgeCount << "edges";
+		//raytracingGPU.updateGrids(grids);
+		//free(grids);
+	}
 	QString beginCUDA() {
+		//struct Grids *grids = (struct Grids *)malloc(sizeof(struct Grids));
+		//grids->width = LENGTH;
+		//grids->height = LENGTH;
+		//int edgeCount = 0;
+		//for (int i = 0; i < ROW*COL; i++) {
+		//	if (mygrid[i].N != 0) {
+		//		grids->grids[i].N = mygrid[i].N;
+		//		edgeCount += mygrid[i].N;
+		//		grids->grids[i].isContains = true;
+		//		for (int j = 0; j < mygrid[i].N; j++) {
+		//			grids->grids[i].edges[j].xstart = mygrid[i].myedge[j].x1;
+		//			grids->grids[i].edges[j].ystart = mygrid[i].myedge[j].y1;
+		//			grids->grids[i].edges[j].xend = mygrid[i].myedge[j].x2;
+		//			grids->grids[i].edges[j].yend = mygrid[i].myedge[j].y2;
+		//			grids->grids[i].edges[j].vectorX = mygrid[i].myedge[j].vx;
+		//			grids->grids[i].edges[j].vectorY = mygrid[i].myedge[j].vy;
+		//		}
+		//	}
+		//	else {
+		//		grids->grids[i].N = 0;
+		//		grids->grids[i].isContains = false;
+		//	}
+		//}
+		//qDebug() << "data inited succeed, there has " << edgeCount << "edges";
+		//raytracingGPU.updateGrids(grids);
 		qDebug() << "begin CUDA";
-		struct Grids *grids = (struct Grids *)malloc(sizeof(struct Grids));
-		grids->width = LENGTH;
-		grids->height = LENGTH;
-		int edgeCount = 0;
-		for (int i = 0; i < ROW*COL; i++) {
-			if (mygrid[i].N != 0) {
-				grids->grids[i].N = mygrid[i].N;
-				edgeCount += mygrid[i].N;
-				grids->grids[i].isContains = true;
-				for (int j = 0; j < mygrid[i].N; j++) {
-					grids->grids[i].edges[j].xstart = mygrid[i].myedge[j].x1;
-					grids->grids[i].edges[j].ystart = mygrid[i].myedge[j].y1;
-					grids->grids[i].edges[j].xend = mygrid[i].myedge[j].x2;
-					grids->grids[i].edges[j].yend = mygrid[i].myedge[j].y2;
-					grids->grids[i].edges[j].vectorX = mygrid[i].myedge[j].vx;
-					grids->grids[i].edges[j].vectorY = mygrid[i].myedge[j].vy;
-				}
-			}
-			else {
-				grids->grids[i].N = 0;
-				grids->grids[i].isContains = false;
-			}
-		}
-		qDebug() << "data inited succeed, there has " << edgeCount << "edges";
-
-		vector<vector<double>> getResult = initCUDAInput(grids, Tx_x, Tx_y, Rx_x, Rx_y, 360);
-		qDebug() << "calculation finished";
-		//ofstream out("line.txt");
 		QJsonObject json;
 		json.insert("type", QString("output"));
+		vector<vector<double>> getResult = raytracingGPU.initCUDAInput(Rx_x,Rx_y);
+		//vector<vector<double>> getResult = initCUDAInputS(grids,Tx_x,Tx_y,Rx_x,Rx_y,180);
+		qDebug() << "calculation finished";
 		QJsonArray paths;
 		QJsonObject pointTemp;
 		pointTemp.insert("x", Tx_x - 50);
@@ -162,6 +206,41 @@ public:
 		}
 		json.insert("paths", paths);
 		json.insert("state", QString("1"));
+
+		//json.insert("time", raytracingGPU.getSpendTime());
+		//if (raytracingGPU.isReady()) {
+		//	vector<vector<double>> getResult = raytracingGPU.initCUDAInput(grids);
+		//	qDebug() << "calculation finished";			
+		//	QJsonArray paths;
+		//	QJsonObject pointTemp;
+		//	pointTemp.insert("x", Tx_x - 50);
+		//	pointTemp.insert("y", (Tx_y - 50));
+		//	pointTemp.insert("z", 0);
+		//	qDebug() << "getResult.size()" << getResult.size();
+		//	for (int i = 0; i < getResult.size(); i++) {
+		//		QJsonObject path;
+		//		path.insert("pathloss", -117.8);
+		//		QJsonArray nodeList;
+		//		nodeList.push_back(pointTemp);
+		//		for (int j = 0; j < getResult[i].size(); j += 2) {
+		//			QJsonObject point;
+		//			point.insert("x", (getResult[i][j] - 50));
+		//			point.insert("y", (getResult[i][j + 1] - 50));
+		//			point.insert("z", 0);
+		//			//qDebug() << (getResult[i][j] - 50)<< "," << (getResult[i][j + 1] - 50);
+		//			nodeList.push_back(point);
+		//		}
+		//		path.insert("nodeList", nodeList);
+		//		paths.push_back(path);
+		//	}
+		//	json.insert("paths", paths);
+		//	json.insert("state", QString("1"));
+		//	json.insert("time", raytracingGPU.getSpendTime());
+		//}
+		//else {
+		//	qDebug() << "calculations do not begin";
+		//	json.insert("state", QString("0"));
+		//}	
 		QJsonDocument doc(json);
 		QString strJson(doc.toJson(QJsonDocument::Compact));
 		qDebug() << "Send Message";
@@ -263,7 +342,7 @@ public:
 	//需要将这个墙面加入到坐标系统
 	//我们的grid系统是50*50的网格，每个网格的边长为2
 	//将问题抽象为 从起点x1,y1出发，到x2,y2为止，每次碰到的墙面
-	double direction(double v1x,double v1y,double v2x,double v2y) {
+	double direction(double v1x, double v1y, double v2x, double v2y) {
 		//返回为正，则
 		return (v1x*v2y - v2x * v1y);
 	}
@@ -296,7 +375,8 @@ public:
 		for (int i = minRow; i <= targetRow; i++) {
 			for (int j = minCol; j <= targetCol; j++) {
 				int currentIndex = i * COL + j;
-				flag = mygrid[currentIndex].insert(x1, y1, x2, y2, normalVectorX, normalVectorY);
+				flag = raytracingGPU.updateEdges(currentIndex, x1, y1, x2, y2, normalVectorX, normalVectorY);
+				//flag = mygrid[currentIndex].insert(x1, y1, x2, y2, normalVectorX, normalVectorY);
 			}
 		}
 		return flag;

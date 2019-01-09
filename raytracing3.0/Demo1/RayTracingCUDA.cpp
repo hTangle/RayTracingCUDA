@@ -2,19 +2,19 @@
 
 
 
-RayTracingCUDA::RayTracingCUDA()
-{
-	//for (int i = 0; i < ROW*COL; i++) {
-	//	vector<vector<double>> grid;
-	//	grid_input.push_back(grid);
-	//}
-}
-
-
-RayTracingCUDA::~RayTracingCUDA()
-{
-
-}
+//RayTracingCUDA::RayTracingCUDA()
+//{
+//	//for (int i = 0; i < ROW*COL; i++) {
+//	//	vector<vector<double>> grid;
+//	//	grid_input.push_back(grid);
+//	//}
+//}
+//
+//
+//RayTracingCUDA::~RayTracingCUDA()
+//{
+//
+//}
 
 //12
 //[43.427, 52.5687]

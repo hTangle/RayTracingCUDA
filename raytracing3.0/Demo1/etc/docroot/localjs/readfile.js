@@ -73,7 +73,6 @@ roadfileInput.addEventListener('change', function () {
 fileInput2.addEventListener('change', function () {
     var file = fileInput2.files[0];
 
-
     if (!(file.name.endsWith('.dbf') )) {
         alert('Can only upload dbf file.');
         return false;
@@ -89,7 +88,6 @@ fileInput2.addEventListener('change', function () {
 
 roadfileInput2.addEventListener('change', function () {
     var file = roadfileInput2.files[0];
-
 
     if (!(file.name.endsWith('.dbf') )) {
         alert('Can only upload dbf file.');
