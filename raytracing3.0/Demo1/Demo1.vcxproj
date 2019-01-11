@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClCompile Include="..\QtWebApp\logging\dualfilelogger.cpp" />
     <ClCompile Include="MyRayTracingCPUcpp.cpp" />
+    <ClCompile Include="RayTracing.cpp" />
     <ClCompile Include="RayTracingCUDA.cpp" />
     <ClCompile Include="src\controller\dumpcontroller.cpp" />
     <ClCompile Include="src\echoserver.cpp" />
@@ -225,6 +226,9 @@
     <ClCompile Include="..\QtWebApp\templateengine\templateloader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CUDARayTracingGPU.h" />
+    <ClInclude Include="MyRayTracingCPU.h" />
+    <ClInclude Include="RayTracing.h" />
     <ClInclude Include="StaticConstants.h" />
     <QtMoc Include="..\QtWebApp\logging\dualfilelogger.h">
     </QtMoc>

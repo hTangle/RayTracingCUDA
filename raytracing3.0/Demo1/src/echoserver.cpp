@@ -84,7 +84,7 @@ void EchoServer::processTextMessage(QString message)
 			}
 			else if (type == "readCUDAInformation") {
 				vector<QString> getInformation = rayTracingCUDA->getCUDADetailInformation();
-				if (getInformation.size() > 0) {
+				if (getInformation.size() > 5) {
 					for (int i = 0; i < getInformation.size(); i+=9) {
 						sendLogMessage(QString("drivers:%1").arg(getInformation[i]));
 						sendLogMessage(QString("name  :%1").arg(getInformation[i+1]));

@@ -131,6 +131,9 @@
     <ClCompile Include="RayTracingCUDA.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="RayTracing.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\QtWebApp\logging\dualfilelogger.h">
@@ -463,6 +466,15 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="StaticConstants.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracing.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CUDARayTracingGPU.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRayTracingCPU.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

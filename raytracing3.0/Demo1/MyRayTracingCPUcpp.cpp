@@ -3,6 +3,7 @@
 #include <math.h>
 #include "time.h" 
 #include "MyCUDARayTracing.h"
+#include "MyRayTracingCPU.h"
 #include "StaticConstants.h"
 
 //向量均使用单位向量
@@ -27,23 +28,23 @@
 
 
 
-double directionIntersectCPU(double x1, double y1, double x2, double y2, double x3, double y3) {
+double RayTracingCPU::directionIntersectCPU(double x1, double y1, double x2, double y2, double x3, double y3) {
 	//(x3-x1,y3-y1)X(x2-x1,y2-y1)
 	return (y2 - y1)*(x3 - x1) - (x2 - x1)*(y3 - y1);
 }
-double MyminCPU(double x1, double x2) {
+double RayTracingCPU::MyminCPU(double x1, double x2) {
 	if (x1 < x2)
 		return x1;
 	else
 		return x2;
 }
-double MymaxCPU(double x1, double x2) {
+double RayTracingCPU::MymaxCPU(double x1, double x2) {
 	return x1 > x2 ? x1 : x2;
 }
-double calDistanceCPU(double x1, double y1, double x2, double y2) {
+double RayTracingCPU::calDistanceCPU(double x1, double y1, double x2, double y2) {
 	return sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 }
-bool onSegmentCPU(double x1, double y1, double x2, double y2, double x3, double y3) {
+bool RayTracingCPU::onSegmentCPU(double x1, double y1, double x2, double y2, double x3, double y3) {
 	if (MyminCPU(x1, x2) <= x3 && x3 < MymaxCPU(x1, x2) && MyminCPU(y1, y2) < y3&&y3 < MymaxCPU(y1, y2)) {
 		return true;
 	}
@@ -51,7 +52,7 @@ bool onSegmentCPU(double x1, double y1, double x2, double y2, double x3, double 
 		return false;
 	}
 }
-void calculPointOfIntersectionCPU(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double &x, double &y) {
+void RayTracingCPU::calculPointOfIntersectionCPU(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double &x, double &y) {
 	double a = y2 - y1;
 	double b = x1 - x2;
 	double c = y4 - y3;
@@ -61,7 +62,7 @@ void calculPointOfIntersectionCPU(double x1, double y1, double x2, double y2, do
 	x = (e*d - b * f) / (a*d - b * c);
 	y = (a*f - e * c) / (a*d - b * c);
 }
-bool segmentsIntersectCPU(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
+bool RayTracingCPU::segmentsIntersectCPU(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
 	double d1 = directionIntersectCPU(x3, y3, x4, y4, x1, y1);
 	double d2 = directionIntersectCPU(x3, y3, x4, y4, x2, y2);
 	double d3 = directionIntersectCPU(x1, y1, x2, y2, x3, y3);
@@ -84,18 +85,18 @@ bool segmentsIntersectCPU(double x1, double y1, double x2, double y2, double x3,
 		return false;
 }
 
-void normalizeVectorCPU(double &x, double &y) {
+void RayTracingCPU::normalizeVectorCPU(double &x, double &y) {
 	double norm = sqrt(x*x + y * y);
 	x = x / norm;
 	y = y / norm;
 }
-double calculDistancePointAndLineCPU(double x1, double y1, double x2, double y2, double x0, double y0) {
+double RayTracingCPU::calculDistancePointAndLineCPU(double x1, double y1, double x2, double y2, double x0, double y0) {
 	double A = y2 - y1;
 	double B = x1 - x2;
 	double C = x2 * y1 - x1 * y2;
 	return abs(A*x0 + B * y0 + C) / sqrt(A*A + B * B);
 }
-bool isEndPointCPU(Edge edge, double x, double y) {
+bool RayTracingCPU::isEndPointCPU(Edge edge, double x, double y) {
 	double d1 = calDistanceCPU(edge.xend, edge.yend, x, y);
 	double d2 = calDistanceCPU(edge.xstart, edge.ystart, x, y);
 	if (d1 < IS_DIFFRACTION_RADIUS || d2 < IS_DIFFRACTION_RADIUS) {
@@ -105,7 +106,7 @@ bool isEndPointCPU(Edge edge, double x, double y) {
 		return false;
 	}
 }
-void judegTouchedDiffractionCPU(MyVector *vector, Grids *grids, Points *diffractionPoints, Point *point, int N, int currentPointsIndex) {
+void RayTracingCPU::judegTouchedDiffractionCPU(MyVector *vector,Point *point, int currentPointsIndex) {
 	//int i = blockDim.x * blockIdx.x + threadIdx.x;
 	for (int i = 0; i < N;i++) {
 		int row = vector[i].row;
@@ -217,17 +218,17 @@ void judegTouchedDiffractionCPU(MyVector *vector, Grids *grids, Points *diffract
 			}
 			//vectorX vectorY不可能同时为0
 			//如果格子中包含边或者接收点位于该格子内时，才需要遍历
-			if (grids->grids[indexC].isContains || (oldRow == point->row&&oldCol == point->col)) {
+			if (dev_grids->grids[indexC].isContains || (oldRow == point->row&&oldCol == point->col)) {
 				//contains edge
 				double distanceM = std::sqrt(2.0)*LENGTH + 1;
 				bool isFind = false;
 				double insertPointOutX = 0, insertPointOutY = 0;
 				int edgeIndex = -1;
 
-				for (int k = 0; k < grids->grids[indexC].N; k++) {
-					if (segmentsIntersectCPU(x, y, newX, newY, grids->grids[indexC].edges[k].xstart, grids->grids[indexC].edges[k].ystart, grids->grids[indexC].edges[k].xend, grids->grids[indexC].edges[k].yend) == true) {
+				for (int k = 0; k < dev_grids->grids[indexC].N; k++) {
+					if (segmentsIntersectCPU(x, y, newX, newY, dev_grids->grids[indexC].edges[k].xstart, dev_grids->grids[indexC].edges[k].ystart, dev_grids->grids[indexC].edges[k].xend, dev_grids->grids[indexC].edges[k].yend) == true) {
 						double insertPointX = 0, insertPointY = 0;//当前交点
-						calculPointOfIntersectionCPU(x, y, newX, newY, grids->grids[indexC].edges[k].xstart, grids->grids[indexC].edges[k].ystart, grids->grids[indexC].edges[k].xend, grids->grids[indexC].edges[k].yend, insertPointX, insertPointY);
+						calculPointOfIntersectionCPU(x, y, newX, newY, dev_grids->grids[indexC].edges[k].xstart, dev_grids->grids[indexC].edges[k].ystart, dev_grids->grids[indexC].edges[k].xend, dev_grids->grids[indexC].edges[k].yend, insertPointX, insertPointY);
 						if (currentX > insertPointX || insertPointX > currentX + LENGTH || currentY > insertPointY || insertPointY > currentY + LENGTH) {
 							//交点必须在这个格子内
 							continue;
@@ -341,8 +342,8 @@ void judegTouchedDiffractionCPU(MyVector *vector, Grids *grids, Points *diffract
 					//grids->grids[indexC].edges[k]
 					//之前求的墙面的法向量是顺时针方向的，也就是朝内，但是我们默认射线只从外部射过来
 					//因此法向量均取反
-					double edgeVectorX = grids->grids[indexC].edges[edgeIndex].vectorX;
-					double edgeVectorY = grids->grids[indexC].edges[edgeIndex].vectorY;
+					double edgeVectorX = dev_grids->grids[indexC].edges[edgeIndex].vectorX;
+					double edgeVectorY = dev_grids->grids[indexC].edges[edgeIndex].vectorY;
 
 					if (edgeVectorX*currentVectorX + edgeVectorY * currentVectorY < 0) {
 						//说明射线在墙的内部，因此直接结束
@@ -431,17 +432,17 @@ void judegTouchedDiffractionCPU(MyVector *vector, Grids *grids, Points *diffract
 vector is input
 points is output
 */
-void judgeIsTouchedCPU(MyVector *vector, Grids *grids, Points *points, Points *diffractionPoints, Point *point, int N, int currentPointsIndex) {
+void RayTracingCPU::judgeIsTouchedCPU(Point *point,int currentPointsIndex) {
 	//int i = blockDim.x * blockIdx.x + threadIdx.x;
 	for (int i = 0; i < N;i++) {
-		int row = vector[i].row;
-		int col = vector[i].col;
+		int row = myVector[i].row;
+		int col = myVector[i].col;
 		int oldRow = row;
 		int oldCol = col;
-		double x = vector[i].x;
-		double y = vector[i].y;
-		double vectorX = vector[i].vectorX;
-		double vectorY = vector[i].vectorY;
+		double x = myVector[i].x;
+		double y = myVector[i].y;
+		double vectorX = myVector[i].vectorX;
+		double vectorY = myVector[i].vectorY;
 		while (true) {
 			oldRow = row;
 			oldCol = col;
@@ -543,17 +544,17 @@ void judgeIsTouchedCPU(MyVector *vector, Grids *grids, Points *points, Points *d
 			}
 			//vectorX vectorY不可能同时为0
 			//如果格子中包含边或者接收点位于该格子内时，才需要遍历
-			if (grids->grids[indexC].isContains || (oldRow == point->row&&oldCol == point->col)) {
+			if (dev_grids->grids[indexC].isContains || (oldRow == point->row&&oldCol == point->col)) {
 				//contains edge
 				double distanceM = std::sqrt(2.0)*LENGTH + 1;
 				bool isFind = false;
 				double insertPointOutX = 0, insertPointOutY = 0;
 				int edgeIndex = -1;
 
-				for (int k = 0; k < grids->grids[indexC].N; k++) {
-					if (segmentsIntersectCPU(x, y, newX, newY, grids->grids[indexC].edges[k].xstart, grids->grids[indexC].edges[k].ystart, grids->grids[indexC].edges[k].xend, grids->grids[indexC].edges[k].yend) == true) {
+				for (int k = 0; k < dev_grids->grids[indexC].N; k++) {
+					if (segmentsIntersectCPU(x, y, newX, newY, dev_grids->grids[indexC].edges[k].xstart, dev_grids->grids[indexC].edges[k].ystart, dev_grids->grids[indexC].edges[k].xend, dev_grids->grids[indexC].edges[k].yend) == true) {
 						double insertPointX = 0, insertPointY = 0;//当前交点
-						calculPointOfIntersectionCPU(x, y, newX, newY, grids->grids[indexC].edges[k].xstart, grids->grids[indexC].edges[k].ystart, grids->grids[indexC].edges[k].xend, grids->grids[indexC].edges[k].yend, insertPointX, insertPointY);
+						calculPointOfIntersectionCPU(x, y, newX, newY, dev_grids->grids[indexC].edges[k].xstart, dev_grids->grids[indexC].edges[k].ystart, dev_grids->grids[indexC].edges[k].xend, dev_grids->grids[indexC].edges[k].yend, insertPointX, insertPointY);
 						if (currentX > insertPointX || insertPointX > currentX + LENGTH || currentY > insertPointY || insertPointY > currentY + LENGTH) {
 							//交点必须在这个格子内
 							continue;
@@ -604,14 +605,14 @@ void judgeIsTouchedCPU(MyVector *vector, Grids *grids, Points *points, Points *d
 				else if (isFind) {
 					//在此处判断是否发生绕射
 					//isDiffraction必须为false才能访问该处
-					if (isEndPointCPU(grids->grids[indexC].edges[edgeIndex], insertPointOutX, insertPointOutY)) {
-						if (calDistanceCPU(grids->grids[indexC].edges[edgeIndex].xend, grids->grids[indexC].edges[edgeIndex].yend, insertPointOutX, insertPointOutY) < calDistanceCPU(grids->grids[indexC].edges[edgeIndex].xstart, grids->grids[indexC].edges[edgeIndex].ystart, insertPointOutX, insertPointOutY)) {
-							insertPointOutX = grids->grids[indexC].edges[edgeIndex].xend;
-							insertPointOutY = grids->grids[indexC].edges[edgeIndex].yend;
+					if (isEndPointCPU(dev_grids->grids[indexC].edges[edgeIndex], insertPointOutX, insertPointOutY)) {
+						if (calDistanceCPU(dev_grids->grids[indexC].edges[edgeIndex].xend, dev_grids->grids[indexC].edges[edgeIndex].yend, insertPointOutX, insertPointOutY) < calDistanceCPU(dev_grids->grids[indexC].edges[edgeIndex].xstart, dev_grids->grids[indexC].edges[edgeIndex].ystart, insertPointOutX, insertPointOutY)) {
+							insertPointOutX = dev_grids->grids[indexC].edges[edgeIndex].xend;
+							insertPointOutY = dev_grids->grids[indexC].edges[edgeIndex].yend;
 						}
 						else {
-							insertPointOutX = grids->grids[indexC].edges[edgeIndex].xstart;
-							insertPointOutY = grids->grids[indexC].edges[edgeIndex].ystart;
+							insertPointOutX = dev_grids->grids[indexC].edges[edgeIndex].xstart;
+							insertPointOutY = dev_grids->grids[indexC].edges[edgeIndex].ystart;
 						}
 						//发生了绕射，启动新的线程
 						MyVector *myVectorNew = (struct MyVector *)malloc(sizeof(struct MyVector) * N);
@@ -644,7 +645,8 @@ void judgeIsTouchedCPU(MyVector *vector, Grids *grids, Points *points, Points *d
 
 
 						}
-						judegTouchedDiffractionCPU(myVectorNew, grids, diffractionPoints, point, N, i);
+						judegTouchedDiffractionCPU(myVectorNew, point, i);
+						free(myVectorNew);
 						//__syncthreads();
 						//judegTouchedDiffraction << <blocksPerGrid, threadsPerBlock >> > (myVectorNew, grids, diffractionPoints, point, N, i);
 						//__syncthreads();
@@ -669,8 +671,8 @@ void judgeIsTouchedCPU(MyVector *vector, Grids *grids, Points *points, Points *d
 						//grids->grids[indexC].edges[k]
 						//之前求的墙面的法向量是顺时针方向的，也就是朝内，但是我们默认射线只从外部射过来
 						//因此法向量均取反
-						double edgeVectorX = grids->grids[indexC].edges[edgeIndex].vectorX;
-						double edgeVectorY = grids->grids[indexC].edges[edgeIndex].vectorY;
+						double edgeVectorX = dev_grids->grids[indexC].edges[edgeIndex].vectorX;
+						double edgeVectorY = dev_grids->grids[indexC].edges[edgeIndex].vectorY;
 
 						if (edgeVectorX*currentVectorX + edgeVectorY * currentVectorY < 0) {
 							//说明射线在墙的内部，因此直接结束
@@ -762,7 +764,7 @@ void judgeIsTouchedCPU(MyVector *vector, Grids *grids, Points *points, Points *d
 grid_input:存储着网格信息，每个网格中存在边，这些边也会构成向量
 N:表示射线条数，等间隔划分，如果N=360，则每个角度为1度
 */
-vector<vector<double>> initCUDAInputCPU(Grids *grids, double TX_X, double TX_Y, double RX_X, double RX_Y, int N) {
+vector<vector<double>> RayTracingCPU::initCUDAInput(double RX_X, double RX_Y) {
 	//需要初始化的有
 	//grids->存储网格
 	//我们设置网格为50*50的小格子组成，如果传入的数据小于这些，则将其他全部置为空
@@ -772,36 +774,38 @@ vector<vector<double>> initCUDAInputCPU(Grids *grids, double TX_X, double TX_Y, 
 	start = clock();
 	//struct Grids *cuda_grids;
 
-	MyVector *myVector = (struct MyVector *)malloc(sizeof(struct MyVector) * N);
-	Points *points = (struct Points *)malloc(sizeof(struct Points) * N);
+	//MyVector *myVector = (struct MyVector *)malloc(sizeof(struct MyVector) * N);
+	//Points *points = (struct Points *)malloc(sizeof(struct Points) * N);
 	Point *Rx = (struct Point *)malloc(sizeof(struct Point));
-	Points *diffractionPoints = (struct Points *)malloc(sizeof(struct Points) * N*N);
+	//Points *diffractionPoints = (struct Points *)malloc(sizeof(struct Points) * N*N);
 
 	Rx->x = RX_X;
 	Rx->y = RX_Y;
 	Rx->row = int(RX_Y / LENGTH);
 	Rx->col = int(RX_X / LENGTH);
 
-	for (int i = 0; i < N; i++) {
-		//myVector[i]= (struct MyVector *)malloc(sizeof(struct MyVector));
-		myVector[i].x = TX_X;
-		myVector[i].y = TX_Y;
-		double angle = 2 * PIs / N * i;
-		myVector[i].vectorX = cos(angle);
-		myVector[i].vectorY = sin(angle);
-		myVector[i].col = int(TX_X / 2);
-		myVector[i].row = int(TX_Y / 2);
-		points[i].N = 0;
-		points[i].isFind = false;
-		for (int j = 0; j < N; j++) {
-			diffractionPoints[i*N + j].N = 0;
-			diffractionPoints[i*N + j].isFind = false;
-		}
-	}
+	//for (int i = 0; i < N; i++) {
+	//	//myVector[i]= (struct MyVector *)malloc(sizeof(struct MyVector));
+	//	myVector[i].x = TX_X;
+	//	myVector[i].y = TX_Y;
+	//	double angle = 2 * PIs / N * i;
+	//	myVector[i].vectorX = cos(angle);
+	//	myVector[i].vectorY = sin(angle);
+	//	myVector[i].col = int(TX_X / 2);
+	//	myVector[i].row = int(TX_Y / 2);
+	//	points[i].N = 0;
+	//	points[i].isFind = false;
+	//	for (int j = 0; j < N; j++) {
+	//		diffractionPoints[i*N + j].N = 0;
+	//		diffractionPoints[i*N + j].isFind = false;
+	//	}
+	//}
 
 
 
-	judgeIsTouchedCPU(myVector, grids, points, diffractionPoints, Rx, N, 0);
+	judgeIsTouchedCPU(Rx,0);
+	finish = clock();
+	spendTime = (double)(finish - start) / CLOCKS_PER_SEC;
 	vector<vector<double>> getResult;
 	int pointsCount = 0;
 	for (int i = 0; i < N; i++) {
@@ -819,7 +823,7 @@ vector<vector<double>> initCUDAInputCPU(Grids *grids, double TX_X, double TX_Y, 
 				results.push_back(points[i].point[j].x);
 				results.push_back(points[i].point[j].y);
 			}
-			getResult.push_back(results);
+			//getResult.push_back(results);
 			for (int m = 0; m < N; m++) {
 				//qDebug() << "come to here"+ diffractionPoints[i*N + m].N;
 				if (diffractionPoints[i*N + m].isFind) {
@@ -846,10 +850,57 @@ vector<vector<double>> initCUDAInputCPU(Grids *grids, double TX_X, double TX_Y, 
 	//		}
 	//	}
 	//}
-	finish = clock();
-	double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-	printf("%f seconds\n", duration);
+	//finish = clock();
+	//double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+	//printf("%f seconds\n", duration);
 	//需要返回point
-	free(myVector);
+	free(Rx);
 	return getResult;
+}	
+RayTracingCPU::RayTracingCPU() {
+
+}
+RayTracingCPU::~RayTracingCPU() {
+	free(myVector);
+	free(points);
+	free(diffractionPoints);
+	free(dev_grids);
+}
+void RayTracingCPU::init() {
+	points = (struct Points *)malloc(sizeof(struct Points) * N);
+	diffractionPoints= (struct Points *)malloc(sizeof(struct Points) * N*N);
+	dev_grids= (struct Grids *)malloc(sizeof(struct Grids));
+	for (int i = 0; i < N; i++) {
+		points[i].N = 0;
+		points[i].isFind = false;
+		for (int j = 0; j < N; j++) {
+			diffractionPoints[i*N + j].N = 0;
+			diffractionPoints[i*N + j].isFind = false;
+		}
+	}
+}
+void RayTracingCPU::updateTx(double x, double y) {
+	if (txUpdateFlag) {
+		//cudaFree(cuda_myVector);
+	}
+	else {
+		txUpdateFlag = true;
+		myVector= (struct MyVector *)malloc(sizeof(struct MyVector) * N);
+		//cudaMallocManaged((void**)&myVector, sizeof(struct MyVector) * N);
+		//myVector = (struct MyVector *)malloc(sizeof(struct MyVector) * N);
+	}
+
+	for (int i = 0; i < N; i++) {
+		//myVector[i]= (struct MyVector *)malloc(sizeof(struct MyVector));
+		myVector[i].x = x;
+		myVector[i].y = y;
+		double angle = 2 * PIs / N * i;
+		myVector[i].vectorX = cos(angle);
+		myVector[i].vectorY = sin(angle);
+		myVector[i].col = int(x / 2);
+		myVector[i].row = int(y / 2);
+	}
+}
+void RayTracingCPU::updateRx(double x, double y) {
+	rxUpdateFlag = true;
 }

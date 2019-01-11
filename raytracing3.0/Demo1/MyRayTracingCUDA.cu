@@ -4,9 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include "time.h" 
-#include "MyCUDARayTracing.h"
+#include "CUDARayTracingGPU.h"
 #include "StaticConstants.h"
 #include <QtCore/QDebug>
+#include <QTime>
 
 
 
@@ -656,6 +657,7 @@ __global__ void judgeIsTouched(MyVector *vector, Grids *grids, Points *points, P
 						int blocksPerGrid = N / 128 + 1;
 						//__syncthreads();
 						judegTouchedDiffraction << <blocksPerGrid, threadsPerBlock >> > (myVectorNew, grids, diffractionPoints, point, N, i);
+						//cudaDeviceSynchronize();
 						//__syncthreads();
 						//judgeIsTouched << <blocksPerGrid, threadsPerBlock >> > (myVectorNew, grids, points, diffractionPoints, point, N, true, i);
 						//执行结束以后将不再向下执行
@@ -896,12 +898,12 @@ vector<vector<double>> CUDARayTracingGPU::initCUDAInput(double RX_X, double RX_Y
 	//int N = 180;
 	//printf("Start...%d\n", sizeof(bool));
 	clock_t start, finish;
-	start = clock();
 
 	//MyVector *myVector = (struct MyVector *)malloc(sizeof(struct MyVector) * N);
 	//Points *points = (struct Points *)malloc(sizeof(struct Points) * N);
 	//////我们需要定义一个结构体用来存储绕射得到的参数，这地方有个问题是，如果N=360，则这360条ray均可能产生绕射，但是事实情况是饶舌产生的可能性比较小，因此这么多空间就浪费了
 	//Points *diffractionPoints = (struct Points *)malloc(sizeof(struct Points) * N*N);
+	
 	Point *Rx = (struct Point *)malloc(sizeof(struct Point));
 	Rx->x = RX_X;
 	Rx->y = RX_Y;
@@ -946,9 +948,11 @@ vector<vector<double>> CUDARayTracingGPU::initCUDAInput(double RX_X, double RX_Y
 	//这地方应该是有问题的
 	int threadsPerBlock = 128;
 	int blocksPerGrid = N / 128 + 1;
-
+	start = clock();
 	judgeIsTouched << <blocksPerGrid, threadsPerBlock >> > (myVector, dev_grids, points, diffractionPoints, cuda_Rx, N, 0);
 	cudaDeviceSynchronize();
+	finish = clock();
+	spendTime = (double)(finish - start) / CLOCKS_PER_SEC;
 	cudaMemcpy(cuda_points,points,  sizeof(struct Points) * N, cudaMemcpyDeviceToHost);
 	cudaMemcpy(cuda_diffractionPoints,diffractionPoints,  sizeof(struct Points) * N*N, cudaMemcpyDeviceToHost);
 	//MyVector *myVector = (struct MyVector *)malloc(sizeof(struct MyVector) * N);
@@ -1006,16 +1010,16 @@ vector<vector<double>> CUDARayTracingGPU::initCUDAInput(double RX_X, double RX_Y
 	//	}
 	//}
 
-	finish = clock();
-	spendTime = (double)(finish - start) / CLOCKS_PER_SEC;
+
 
 	//需要返回point
 
 	//cudaFree(cuda_grids);
 	//cudaFree(cuda_myVector);
 	free(cuda_points);
-	//cudaFree(cuda_Rx);
+	cudaFree(cuda_Rx);
 	free(cuda_diffractionPoints);
+	//free(Rx);
 	return getResult;
 }
 
@@ -1107,26 +1111,7 @@ CUDARayTracingGPU::~CUDARayTracingGPU() {
 CUDARayTracingGPU::CUDARayTracingGPU() {
 
 }
-void CUDARayTracingGPU::clearGrids() {
-	for (int i = 0; i < ROW*COL; i++) {
-		dev_grids->grids[i].N=0;
-		dev_grids->grids[i].isContains = false;
-	}
-}
-bool CUDARayTracingGPU::updateEdges(int index, double x0, double y0, double x1, double y1, double vx, double vy) {
-	if (dev_grids->grids[index].N >= MAX_EDGE_GRID) {
-		return false;
-	}
-	dev_grids->grids[index].edges[dev_grids->grids[index].N].xstart = x0;
-	dev_grids->grids[index].edges[dev_grids->grids[index].N].ystart = y0;
-	dev_grids->grids[index].edges[dev_grids->grids[index].N].xend = x1;
-	dev_grids->grids[index].edges[dev_grids->grids[index].N].yend = y1;
-	dev_grids->grids[index].edges[dev_grids->grids[index].N].vectorX = vx;
-	dev_grids->grids[index].edges[dev_grids->grids[index].N].vectorY = vy;
-	dev_grids->grids[index].N++;
-	dev_grids->grids[index].isContains = true;
-	return true;
-}
+
 void CUDARayTracingGPU::init() {
 	cudaMallocManaged((void**)&points, sizeof(struct Points) * N);
 	cudaMallocManaged((void**)&diffractionPoints, sizeof(struct Points) * N*N);
@@ -1148,10 +1133,10 @@ void CUDARayTracingGPU::init() {
 	//cudaMemcpy(cuda_points, points, sizeof(struct Points) * N, cudaMemcpyHostToDevice);
 	//cudaMemcpy(cuda_diffractionPoints, diffractionPoints, sizeof(struct Points) * N*N, cudaMemcpyHostToDevice);
 }
-CUDARayTracingGPU::CUDARayTracingGPU(int N) {
-	setN(N);
-	init();
-}
+//CUDARayTracingGPU::CUDARayTracingGPU(int N) {
+//	setN(N);
+//	init();
+//}
 
 
 

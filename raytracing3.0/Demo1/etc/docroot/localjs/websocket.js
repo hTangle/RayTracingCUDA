@@ -55,6 +55,7 @@ function initWebSocket() {
             if (data.type == "output") {
                 if (data.state == "1") {
                     drawMyLine(data);
+                    $("#logOutput").append(data.time + "</br>");
                 } else {
 
                 }

@@ -6,11 +6,14 @@
 #include <list> 
 #include <QtCore/QDebug>
 #include "MyCUDARayTracing.h"
+#include "CUDARayTracingGPU.h"
+#include "MyRayTracingCPU.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
-using namespace std;
+#include <QDateTime>
 
+using namespace std;
 class MyEdge {
 public:
 	double x1, y1, x2, y2, vx, vy;
@@ -51,8 +54,9 @@ class RayTracingCUDA
 {
 public:
 	MyGrid *mygrid = new MyGrid[COL*ROW];
-	CUDARayTracingGPU raytracingGPU;
-
+	//RayTracingCUDA 
+	//CUDARayTracingGPU raytracingGPU;
+	RayTracingCPU raytracingGPU;
 	//vector<list<list<double>>> girdList;
 	//vector<vector<vector<double>>> grid_input;
 	//MyClass *myClass = new MyClass[ROW*COL];
@@ -64,7 +68,8 @@ public:
 	}
 public:
 	RayTracingCUDA() {
-		raytracingGPU.setN(360);
+		//180 0.013 360 0.049 540 0.104 720 0.198
+		raytracingGPU.setN(900);
 		raytracingGPU.init();
 	}
 	~RayTracingCUDA() {
@@ -179,33 +184,40 @@ public:
 		qDebug() << "begin CUDA";
 		QJsonObject json;
 		json.insert("type", QString("output"));
-		vector<vector<double>> getResult = raytracingGPU.initCUDAInput(Rx_x,Rx_y);
-		//vector<vector<double>> getResult = initCUDAInputS(grids,Tx_x,Tx_y,Rx_x,Rx_y,180);
-		qDebug() << "calculation finished";
-		QJsonArray paths;
-		QJsonObject pointTemp;
-		pointTemp.insert("x", Tx_x - 50);
-		pointTemp.insert("y", (Tx_y - 50));
-		pointTemp.insert("z", 0);
-		qDebug() << "getResult.size()" << getResult.size();
-		for (int i = 0; i < getResult.size(); i++) {
-			QJsonObject path;
-			path.insert("pathloss", -117.8);
-			QJsonArray nodeList;
-			nodeList.push_back(pointTemp);
-			for (int j = 0; j < getResult[i].size(); j += 2) {
-				QJsonObject point;
-				point.insert("x", (getResult[i][j] - 50));
-				point.insert("y", (getResult[i][j + 1] - 50));
-				point.insert("z", 0);
-				//qDebug() << (getResult[i][j] - 50)<< "," << (getResult[i][j + 1] - 50);
-				nodeList.push_back(point);
+		if (raytracingGPU.isReady()) {
+			vector<vector<double>> getResult = raytracingGPU.initCUDAInput(Rx_x, Rx_y);
+			//vector<vector<double>> getResult = initCUDAInputS(grids,Tx_x,Tx_y,Rx_x,Rx_y,180);
+			qDebug() << "calculation finished";
+			QJsonArray paths;
+			QJsonObject pointTemp;
+			pointTemp.insert("x", Tx_x - 50);
+			pointTemp.insert("y", (Tx_y - 50));
+			pointTemp.insert("z", 0);
+			qDebug() << "getResult.size()" << getResult.size();
+			for (int i = 0; i < getResult.size(); i++) {
+				QJsonObject path;
+				path.insert("pathloss", -117.8);
+				QJsonArray nodeList;
+				nodeList.push_back(pointTemp);
+				for (int j = 0; j < getResult[i].size(); j += 2) {
+					QJsonObject point;
+					point.insert("x", (getResult[i][j] - 50));
+					point.insert("y", (getResult[i][j + 1] - 50));
+					point.insert("z", 0);
+					//qDebug() << (getResult[i][j] - 50)<< "," << (getResult[i][j + 1] - 50);
+					nodeList.push_back(point);
+				}
+				path.insert("nodeList", nodeList);
+				paths.push_back(path);
 			}
-			path.insert("nodeList", nodeList);
-			paths.push_back(path);
+			json.insert("paths", paths);
+			json.insert("state", QString("1"));
+			json.insert("time", QString("%1: runtime is %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(raytracingGPU.getSpendTime()));
 		}
-		json.insert("paths", paths);
-		json.insert("state", QString("1"));
+		else {
+			json.insert("state", QString("0"));
+		}
+		
 
 		//json.insert("time", raytracingGPU.getSpendTime());
 		//if (raytracingGPU.isReady()) {
